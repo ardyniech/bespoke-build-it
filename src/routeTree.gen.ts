@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ScreeningRouteImport } from './routes/screening'
 import { Route as PiketRouteImport } from './routes/piket'
 import { Route as PetaRouteImport } from './routes/peta'
 import { Route as NotulenRouteImport } from './routes/notulen'
@@ -18,6 +19,11 @@ import { Route as InventarisRouteImport } from './routes/inventaris'
 import { Route as AnggotaRouteImport } from './routes/anggota'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ScreeningRoute = ScreeningRouteImport.update({
+  id: '/screening',
+  path: '/screening',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PiketRoute = PiketRouteImport.update({
   id: '/piket',
   path: '/piket',
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/notulen': typeof NotulenRoute
   '/peta': typeof PetaRoute
   '/piket': typeof PiketRoute
+  '/screening': typeof ScreeningRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/notulen': typeof NotulenRoute
   '/peta': typeof PetaRoute
   '/piket': typeof PiketRoute
+  '/screening': typeof ScreeningRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/notulen': typeof NotulenRoute
   '/peta': typeof PetaRoute
   '/piket': typeof PiketRoute
+  '/screening': typeof ScreeningRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/notulen'
     | '/peta'
     | '/piket'
+    | '/screening'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/notulen'
     | '/peta'
     | '/piket'
+    | '/screening'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/notulen'
     | '/peta'
     | '/piket'
+    | '/screening'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,10 +144,18 @@ export interface RootRouteChildren {
   NotulenRoute: typeof NotulenRoute
   PetaRoute: typeof PetaRoute
   PiketRoute: typeof PiketRoute
+  ScreeningRoute: typeof ScreeningRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/screening': {
+      id: '/screening'
+      path: '/screening'
+      fullPath: '/screening'
+      preLoaderRoute: typeof ScreeningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/piket': {
       id: '/piket'
       path: '/piket'
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotulenRoute: NotulenRoute,
   PetaRoute: PetaRoute,
   PiketRoute: PiketRoute,
+  ScreeningRoute: ScreeningRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
