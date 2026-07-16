@@ -14,6 +14,7 @@ import { Route as PetaRouteImport } from './routes/peta'
 import { Route as NotulenRouteImport } from './routes/notulen'
 import { Route as KejadianRouteImport } from './routes/kejadian'
 import { Route as KasRouteImport } from './routes/kas'
+import { Route as InventarisRouteImport } from './routes/inventaris'
 import { Route as AnggotaRouteImport } from './routes/anggota'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -42,6 +43,11 @@ const KasRoute = KasRouteImport.update({
   path: '/kas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InventarisRoute = InventarisRouteImport.update({
+  id: '/inventaris',
+  path: '/inventaris',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnggotaRoute = AnggotaRouteImport.update({
   id: '/anggota',
   path: '/anggota',
@@ -56,6 +62,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
+  '/inventaris': typeof InventarisRoute
   '/kas': typeof KasRoute
   '/kejadian': typeof KejadianRoute
   '/notulen': typeof NotulenRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
+  '/inventaris': typeof InventarisRoute
   '/kas': typeof KasRoute
   '/kejadian': typeof KejadianRoute
   '/notulen': typeof NotulenRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
+  '/inventaris': typeof InventarisRoute
   '/kas': typeof KasRoute
   '/kejadian': typeof KejadianRoute
   '/notulen': typeof NotulenRoute
@@ -86,17 +95,27 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/anggota'
+    | '/inventaris'
     | '/kas'
     | '/kejadian'
     | '/notulen'
     | '/peta'
     | '/piket'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/anggota' | '/kas' | '/kejadian' | '/notulen' | '/peta' | '/piket'
+  to:
+    | '/'
+    | '/anggota'
+    | '/inventaris'
+    | '/kas'
+    | '/kejadian'
+    | '/notulen'
+    | '/peta'
+    | '/piket'
   id:
     | '__root__'
     | '/'
     | '/anggota'
+    | '/inventaris'
     | '/kas'
     | '/kejadian'
     | '/notulen'
@@ -107,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnggotaRoute: typeof AnggotaRoute
+  InventarisRoute: typeof InventarisRoute
   KasRoute: typeof KasRoute
   KejadianRoute: typeof KejadianRoute
   NotulenRoute: typeof NotulenRoute
@@ -151,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventaris': {
+      id: '/inventaris'
+      path: '/inventaris'
+      fullPath: '/inventaris'
+      preLoaderRoute: typeof InventarisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/anggota': {
       id: '/anggota'
       path: '/anggota'
@@ -171,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnggotaRoute: AnggotaRoute,
+  InventarisRoute: InventarisRoute,
   KasRoute: KasRoute,
   KejadianRoute: KejadianRoute,
   NotulenRoute: NotulenRoute,
