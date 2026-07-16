@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as KejadianRouteImport } from './routes/kejadian'
 import { Route as KasRouteImport } from './routes/kas'
 import { Route as AnggotaRouteImport } from './routes/anggota'
 import { Route as IndexRouteImport } from './routes/index'
 
+const KejadianRoute = KejadianRouteImport.update({
+  id: '/kejadian',
+  path: '/kejadian',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KasRoute = KasRouteImport.update({
   id: '/kas',
   path: '/kas',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
   '/kas': typeof KasRoute
+  '/kejadian': typeof KejadianRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
   '/kas': typeof KasRoute
+  '/kejadian': typeof KejadianRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
   '/kas': typeof KasRoute
+  '/kejadian': typeof KejadianRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/anggota' | '/kas'
+  fullPaths: '/' | '/anggota' | '/kas' | '/kejadian'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/anggota' | '/kas'
-  id: '__root__' | '/' | '/anggota' | '/kas'
+  to: '/' | '/anggota' | '/kas' | '/kejadian'
+  id: '__root__' | '/' | '/anggota' | '/kas' | '/kejadian'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnggotaRoute: typeof AnggotaRoute
   KasRoute: typeof KasRoute
+  KejadianRoute: typeof KejadianRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/kejadian': {
+      id: '/kejadian'
+      path: '/kejadian'
+      fullPath: '/kejadian'
+      preLoaderRoute: typeof KejadianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kas': {
       id: '/kas'
       path: '/kas'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnggotaRoute: AnggotaRoute,
   KasRoute: KasRoute,
+  KejadianRoute: KejadianRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
