@@ -88,21 +88,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Platform operasional Komunitas DRG: data anggota, kas transparan, SOS & peta lokasi, piket Satgas, dan kaderisasi. Self-hosted, tanpa Google.",
       },
       { name: "author", content: "Komunitas DRG" },
-      { property: "og:title", content: "DRG App — Driver Riang Gembira" },
+      { property: "og:title", content: "DRG App — Platform Komunitas Driver Riang Gembira" },
       {
         property: "og:description",
         content:
-          "Satu platform untuk operasional Komunitas DRG: anggota, kas, SOS, peta, dan kaderisasi.",
+          "Platform operasional Komunitas DRG: data anggota, kas transparan, SOS & peta lokasi, piket Satgas, dan kaderisasi. Self-hosted, tanpa Google.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "DRG App — Platform Komunitas Driver Riang Gembira" },
+      { name: "twitter:description", content: "Platform operasional Komunitas DRG: data anggota, kas transparan, SOS & peta lokasi, piket Satgas, dan kaderisasi. Self-hosted, tanpa Google." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/beb10b80-723e-48f5-b5e5-19a1c30764cb" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/beb10b80-723e-48f5-b5e5-19a1c30764cb" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
