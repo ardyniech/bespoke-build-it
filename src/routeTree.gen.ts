@@ -9,8 +9,74 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ScreeningRouteImport } from './routes/screening'
+import { Route as PiketRouteImport } from './routes/piket'
+import { Route as PetaRouteImport } from './routes/peta'
+import { Route as NotulenRouteImport } from './routes/notulen'
+import { Route as KejadianRouteImport } from './routes/kejadian'
+import { Route as KasRouteImport } from './routes/kas'
+import { Route as KaderisasiRouteImport } from './routes/kaderisasi'
+import { Route as InventarisRouteImport } from './routes/inventaris'
+import { Route as EtikRouteImport } from './routes/etik'
+import { Route as AnggotaRouteImport } from './routes/anggota'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScreeningRoute = ScreeningRouteImport.update({
+  id: '/screening',
+  path: '/screening',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PiketRoute = PiketRouteImport.update({
+  id: '/piket',
+  path: '/piket',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PetaRoute = PetaRouteImport.update({
+  id: '/peta',
+  path: '/peta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotulenRoute = NotulenRouteImport.update({
+  id: '/notulen',
+  path: '/notulen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KejadianRoute = KejadianRouteImport.update({
+  id: '/kejadian',
+  path: '/kejadian',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KasRoute = KasRouteImport.update({
+  id: '/kas',
+  path: '/kas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KaderisasiRoute = KaderisasiRouteImport.update({
+  id: '/kaderisasi',
+  path: '/kaderisasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InventarisRoute = InventarisRouteImport.update({
+  id: '/inventaris',
+  path: '/inventaris',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EtikRoute = EtikRouteImport.update({
+  id: '/etik',
+  path: '/etik',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnggotaRoute = AnggotaRouteImport.update({
+  id: '/anggota',
+  path: '/anggota',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +85,186 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/anggota': typeof AnggotaRoute
+  '/etik': typeof EtikRoute
+  '/inventaris': typeof InventarisRoute
+  '/kaderisasi': typeof KaderisasiRoute
+  '/kas': typeof KasRoute
+  '/kejadian': typeof KejadianRoute
+  '/notulen': typeof NotulenRoute
+  '/peta': typeof PetaRoute
+  '/piket': typeof PiketRoute
+  '/screening': typeof ScreeningRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/anggota': typeof AnggotaRoute
+  '/etik': typeof EtikRoute
+  '/inventaris': typeof InventarisRoute
+  '/kaderisasi': typeof KaderisasiRoute
+  '/kas': typeof KasRoute
+  '/kejadian': typeof KejadianRoute
+  '/notulen': typeof NotulenRoute
+  '/peta': typeof PetaRoute
+  '/piket': typeof PiketRoute
+  '/screening': typeof ScreeningRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/anggota': typeof AnggotaRoute
+  '/etik': typeof EtikRoute
+  '/inventaris': typeof InventarisRoute
+  '/kaderisasi': typeof KaderisasiRoute
+  '/kas': typeof KasRoute
+  '/kejadian': typeof KejadianRoute
+  '/notulen': typeof NotulenRoute
+  '/peta': typeof PetaRoute
+  '/piket': typeof PiketRoute
+  '/screening': typeof ScreeningRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/anggota'
+    | '/etik'
+    | '/inventaris'
+    | '/kaderisasi'
+    | '/kas'
+    | '/kejadian'
+    | '/notulen'
+    | '/peta'
+    | '/piket'
+    | '/screening'
+    | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/anggota'
+    | '/etik'
+    | '/inventaris'
+    | '/kaderisasi'
+    | '/kas'
+    | '/kejadian'
+    | '/notulen'
+    | '/peta'
+    | '/piket'
+    | '/screening'
+    | '/sitemap.xml'
+  id:
+    | '__root__'
+    | '/'
+    | '/anggota'
+    | '/etik'
+    | '/inventaris'
+    | '/kaderisasi'
+    | '/kas'
+    | '/kejadian'
+    | '/notulen'
+    | '/peta'
+    | '/piket'
+    | '/screening'
+    | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnggotaRoute: typeof AnggotaRoute
+  EtikRoute: typeof EtikRoute
+  InventarisRoute: typeof InventarisRoute
+  KaderisasiRoute: typeof KaderisasiRoute
+  KasRoute: typeof KasRoute
+  KejadianRoute: typeof KejadianRoute
+  NotulenRoute: typeof NotulenRoute
+  PetaRoute: typeof PetaRoute
+  PiketRoute: typeof PiketRoute
+  ScreeningRoute: typeof ScreeningRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/screening': {
+      id: '/screening'
+      path: '/screening'
+      fullPath: '/screening'
+      preLoaderRoute: typeof ScreeningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/piket': {
+      id: '/piket'
+      path: '/piket'
+      fullPath: '/piket'
+      preLoaderRoute: typeof PiketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/peta': {
+      id: '/peta'
+      path: '/peta'
+      fullPath: '/peta'
+      preLoaderRoute: typeof PetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notulen': {
+      id: '/notulen'
+      path: '/notulen'
+      fullPath: '/notulen'
+      preLoaderRoute: typeof NotulenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kejadian': {
+      id: '/kejadian'
+      path: '/kejadian'
+      fullPath: '/kejadian'
+      preLoaderRoute: typeof KejadianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kas': {
+      id: '/kas'
+      path: '/kas'
+      fullPath: '/kas'
+      preLoaderRoute: typeof KasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kaderisasi': {
+      id: '/kaderisasi'
+      path: '/kaderisasi'
+      fullPath: '/kaderisasi'
+      preLoaderRoute: typeof KaderisasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inventaris': {
+      id: '/inventaris'
+      path: '/inventaris'
+      fullPath: '/inventaris'
+      preLoaderRoute: typeof InventarisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/etik': {
+      id: '/etik'
+      path: '/etik'
+      fullPath: '/etik'
+      preLoaderRoute: typeof EtikRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anggota': {
+      id: '/anggota'
+      path: '/anggota'
+      fullPath: '/anggota'
+      preLoaderRoute: typeof AnggotaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +277,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnggotaRoute: AnggotaRoute,
+  EtikRoute: EtikRoute,
+  InventarisRoute: InventarisRoute,
+  KaderisasiRoute: KaderisasiRoute,
+  KasRoute: KasRoute,
+  KejadianRoute: KejadianRoute,
+  NotulenRoute: NotulenRoute,
+  PetaRoute: PetaRoute,
+  PiketRoute: PiketRoute,
+  ScreeningRoute: ScreeningRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
