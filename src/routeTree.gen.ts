@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as KasRouteImport } from './routes/kas'
 import { Route as AnggotaRouteImport } from './routes/anggota'
 import { Route as IndexRouteImport } from './routes/index'
 
+const KasRoute = KasRouteImport.update({
+  id: '/kas',
+  path: '/kas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnggotaRoute = AnggotaRouteImport.update({
   id: '/anggota',
   path: '/anggota',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
+  '/kas': typeof KasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
+  '/kas': typeof KasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/anggota': typeof AnggotaRoute
+  '/kas': typeof KasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/anggota'
+  fullPaths: '/' | '/anggota' | '/kas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/anggota'
-  id: '__root__' | '/' | '/anggota'
+  to: '/' | '/anggota' | '/kas'
+  id: '__root__' | '/' | '/anggota' | '/kas'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnggotaRoute: typeof AnggotaRoute
+  KasRoute: typeof KasRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/kas': {
+      id: '/kas'
+      path: '/kas'
+      fullPath: '/kas'
+      preLoaderRoute: typeof KasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/anggota': {
       id: '/anggota'
       path: '/anggota'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnggotaRoute: AnggotaRoute,
+  KasRoute: KasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
