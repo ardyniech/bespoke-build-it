@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PiketRouteImport } from './routes/piket'
 import { Route as PetaRouteImport } from './routes/peta'
 import { Route as KejadianRouteImport } from './routes/kejadian'
 import { Route as KasRouteImport } from './routes/kas'
 import { Route as AnggotaRouteImport } from './routes/anggota'
 import { Route as IndexRouteImport } from './routes/index'
 
+const PiketRoute = PiketRouteImport.update({
+  id: '/piket',
+  path: '/piket',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PetaRoute = PetaRouteImport.update({
   id: '/peta',
   path: '/peta',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/kas': typeof KasRoute
   '/kejadian': typeof KejadianRoute
   '/peta': typeof PetaRoute
+  '/piket': typeof PiketRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/kas': typeof KasRoute
   '/kejadian': typeof KejadianRoute
   '/peta': typeof PetaRoute
+  '/piket': typeof PiketRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,14 @@ export interface FileRoutesById {
   '/kas': typeof KasRoute
   '/kejadian': typeof KejadianRoute
   '/peta': typeof PetaRoute
+  '/piket': typeof PiketRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/anggota' | '/kas' | '/kejadian' | '/peta'
+  fullPaths: '/' | '/anggota' | '/kas' | '/kejadian' | '/peta' | '/piket'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/anggota' | '/kas' | '/kejadian' | '/peta'
-  id: '__root__' | '/' | '/anggota' | '/kas' | '/kejadian' | '/peta'
+  to: '/' | '/anggota' | '/kas' | '/kejadian' | '/peta' | '/piket'
+  id: '__root__' | '/' | '/anggota' | '/kas' | '/kejadian' | '/peta' | '/piket'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,10 +86,18 @@ export interface RootRouteChildren {
   KasRoute: typeof KasRoute
   KejadianRoute: typeof KejadianRoute
   PetaRoute: typeof PetaRoute
+  PiketRoute: typeof PiketRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/piket': {
+      id: '/piket'
+      path: '/piket'
+      fullPath: '/piket'
+      preLoaderRoute: typeof PiketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/peta': {
       id: '/peta'
       path: '/peta'
@@ -125,6 +142,7 @@ const rootRouteChildren: RootRouteChildren = {
   KasRoute: KasRoute,
   KejadianRoute: KejadianRoute,
   PetaRoute: PetaRoute,
+  PiketRoute: PiketRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
