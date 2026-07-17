@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Lock, ClipboardList } from "lucide-react";
 
-export const Route = createFileRoute("/screening")({
+export const Route = createFileRoute("/_authenticated/screening")({
   head: () => ({ meta: [{ title: "Screening Calon — DRG App" }] }),
   component: ScreeningPage,
 });

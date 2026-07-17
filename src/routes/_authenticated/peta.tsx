@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Radio, Shield } from "lucide-react";
 
-export const Route = createFileRoute("/peta")({
+export const Route = createFileRoute("/_authenticated/peta")({
   head: () => ({ meta: [{ title: "Peta & Lokasi — DRG App" }] }),
   component: PetaPage,
 });
