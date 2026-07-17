@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { Lock, ShieldAlert } from "lucide-react";
 
-export const Route = createFileRoute("/etik")({
+export const Route = createFileRoute("/_authenticated/etik")({
   head: () => ({
     meta: [
       { title: "Dewan Etik — DRG App" },

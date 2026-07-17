@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/kaderisasi")({
+export const Route = createFileRoute("/_authenticated/kaderisasi")({
   head: () => ({ meta: [{ title: "Evaluasi Kaderisasi — DRG App" }] }),
   component: KaderisasiPage,
 });

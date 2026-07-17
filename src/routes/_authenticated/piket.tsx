@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-export const Route = createFileRoute("/piket")({
+export const Route = createFileRoute("/_authenticated/piket")({
   head: () => ({ meta: [{ title: "Piket Satgas — DRG App" }] }),
   component: PiketPage,
 });

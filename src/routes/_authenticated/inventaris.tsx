@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
 
-export const Route = createFileRoute("/inventaris")({
+export const Route = createFileRoute("/_authenticated/inventaris")({
   head: () => ({ meta: [{ title: "Inventaris — DRG App" }] }),
   component: InventarisPage,
 });

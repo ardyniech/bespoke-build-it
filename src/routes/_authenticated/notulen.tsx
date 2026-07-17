@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Plus } from "lucide-react";
 
-export const Route = createFileRoute("/notulen")({
+export const Route = createFileRoute("/_authenticated/notulen")({
   head: () => ({ meta: [{ title: "Notulen Rapat — DRG App" }] }),
   component: NotulenPage,
 });
