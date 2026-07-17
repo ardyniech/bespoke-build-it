@@ -48,7 +48,7 @@ type Row = {
   kategori: string;
   jenis: "masuk" | "keluar";
   jumlah: number;
-  ledger: "sosial" | "koperasi";
+  ledger: "sosial" | "umum";
 };
 
 function tier(jumlah: number) {
@@ -104,7 +104,7 @@ function KasPage() {
     >
       <div className="mb-6 grid gap-4 md:grid-cols-2">
         <BalanceCard label="Kas Sosial" value={totals.sosial} highlight />
-        <BalanceCard label="Kas Koperasi" value={totals.koperasi} />
+        <BalanceCard label="Kas Umum" value={totals.koperasi} />
       </div>
 
       <div className="mb-4 flex items-center justify-between">
@@ -195,7 +195,7 @@ function NewTxDialog() {
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [jenis, setJenis] = useState<"masuk" | "keluar">("masuk");
-  const [ledger, setLedger] = useState<"sosial" | "koperasi">("sosial");
+  const [ledger, setLedger] = useState<"sosial" | "umum">("sosial");
   const [kategori, setKategori] = useState("Iuran");
   const [jumlah, setJumlah] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
@@ -266,11 +266,11 @@ function NewTxDialog() {
             </div>
             <div>
               <Label>Ledger</Label>
-              <Select value={ledger} onValueChange={(v) => setLedger(v as "sosial" | "koperasi")}>
+              <Select value={ledger} onValueChange={(v) => setLedger(v as "sosial" | "umum")}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="sosial">Sosial</SelectItem>
-                  <SelectItem value="koperasi">Koperasi</SelectItem>
+                  <SelectItem value="umum">Umum</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -14,9 +14,9 @@ export const Route = createFileRoute("/_authenticated/anggota")({
 });
 
 const jenjangTone: Record<string, string> = {
-  inti: "bg-primary/10 text-primary",
+  madya: "bg-primary/10 text-primary",
   muda: "bg-accent/25 text-accent-foreground",
-  magang: "bg-muted text-muted-foreground",
+  purna: "bg-muted text-muted-foreground",
   calon: "bg-muted text-muted-foreground",
 };
 
