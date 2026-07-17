@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const operasional = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "SOS & Kejadian", url: "/kejadian", icon: Siren },
   { title: "Peta & Lokasi", url: "/peta", icon: Map },
   { title: "Piket Satgas", url: "/piket", icon: CalendarClock },
@@ -52,7 +52,7 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const isActive = (url: string) =>
-    url === "/" ? pathname === "/" : pathname.startsWith(url);
+    url === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(url);
   const handleNavClick = () => {
     if (isMobile) setOpenMobile(false);
   };
@@ -60,7 +60,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r-0">
       <SidebarHeader className="px-3 py-4">
-        <Link to="/" className="flex items-center gap-3">
+        <Link to="/dashboard" onClick={handleNavClick} className="flex items-center gap-3">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-warm shadow-warm">
             <span className="font-display text-lg font-bold text-primary-foreground">D</span>
           </div>

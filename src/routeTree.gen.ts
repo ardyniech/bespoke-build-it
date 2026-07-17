@@ -10,71 +10,33 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ScreeningRouteImport } from './routes/screening'
-import { Route as PiketRouteImport } from './routes/piket'
-import { Route as PetaRouteImport } from './routes/peta'
-import { Route as NotulenRouteImport } from './routes/notulen'
-import { Route as KejadianRouteImport } from './routes/kejadian'
-import { Route as KasRouteImport } from './routes/kas'
-import { Route as KaderisasiRouteImport } from './routes/kaderisasi'
-import { Route as InventarisRouteImport } from './routes/inventaris'
-import { Route as EtikRouteImport } from './routes/etik'
-import { Route as AnggotaRouteImport } from './routes/anggota'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedScreeningRouteImport } from './routes/_authenticated/screening'
+import { Route as AuthenticatedPiketRouteImport } from './routes/_authenticated/piket'
+import { Route as AuthenticatedPetaRouteImport } from './routes/_authenticated/peta'
+import { Route as AuthenticatedNotulenRouteImport } from './routes/_authenticated/notulen'
+import { Route as AuthenticatedKejadianRouteImport } from './routes/_authenticated/kejadian'
+import { Route as AuthenticatedKasRouteImport } from './routes/_authenticated/kas'
+import { Route as AuthenticatedKaderisasiRouteImport } from './routes/_authenticated/kaderisasi'
+import { Route as AuthenticatedInventarisRouteImport } from './routes/_authenticated/inventaris'
+import { Route as AuthenticatedEtikRouteImport } from './routes/_authenticated/etik'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAnggotaRouteImport } from './routes/_authenticated/anggota'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ScreeningRoute = ScreeningRouteImport.update({
-  id: '/screening',
-  path: '/screening',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PiketRoute = PiketRouteImport.update({
-  id: '/piket',
-  path: '/piket',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PetaRoute = PetaRouteImport.update({
-  id: '/peta',
-  path: '/peta',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotulenRoute = NotulenRouteImport.update({
-  id: '/notulen',
-  path: '/notulen',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KejadianRoute = KejadianRouteImport.update({
-  id: '/kejadian',
-  path: '/kejadian',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KasRoute = KasRouteImport.update({
-  id: '/kas',
-  path: '/kas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KaderisasiRoute = KaderisasiRouteImport.update({
-  id: '/kaderisasi',
-  path: '/kaderisasi',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InventarisRoute = InventarisRouteImport.update({
-  id: '/inventaris',
-  path: '/inventaris',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EtikRoute = EtikRouteImport.update({
-  id: '/etik',
-  path: '/etik',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AnggotaRoute = AnggotaRouteImport.update({
-  id: '/anggota',
-  path: '/anggota',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -82,55 +44,120 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedScreeningRoute = AuthenticatedScreeningRouteImport.update({
+  id: '/screening',
+  path: '/screening',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPiketRoute = AuthenticatedPiketRouteImport.update({
+  id: '/piket',
+  path: '/piket',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPetaRoute = AuthenticatedPetaRouteImport.update({
+  id: '/peta',
+  path: '/peta',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNotulenRoute = AuthenticatedNotulenRouteImport.update({
+  id: '/notulen',
+  path: '/notulen',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKejadianRoute = AuthenticatedKejadianRouteImport.update({
+  id: '/kejadian',
+  path: '/kejadian',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKasRoute = AuthenticatedKasRouteImport.update({
+  id: '/kas',
+  path: '/kas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKaderisasiRoute = AuthenticatedKaderisasiRouteImport.update({
+  id: '/kaderisasi',
+  path: '/kaderisasi',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInventarisRoute = AuthenticatedInventarisRouteImport.update({
+  id: '/inventaris',
+  path: '/inventaris',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEtikRoute = AuthenticatedEtikRouteImport.update({
+  id: '/etik',
+  path: '/etik',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAnggotaRoute = AuthenticatedAnggotaRouteImport.update({
+  id: '/anggota',
+  path: '/anggota',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/anggota': typeof AnggotaRoute
-  '/etik': typeof EtikRoute
-  '/inventaris': typeof InventarisRoute
-  '/kaderisasi': typeof KaderisasiRoute
-  '/kas': typeof KasRoute
-  '/kejadian': typeof KejadianRoute
-  '/notulen': typeof NotulenRoute
-  '/peta': typeof PetaRoute
-  '/piket': typeof PiketRoute
-  '/screening': typeof ScreeningRoute
+  '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/anggota': typeof AuthenticatedAnggotaRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/etik': typeof AuthenticatedEtikRoute
+  '/inventaris': typeof AuthenticatedInventarisRoute
+  '/kaderisasi': typeof AuthenticatedKaderisasiRoute
+  '/kas': typeof AuthenticatedKasRoute
+  '/kejadian': typeof AuthenticatedKejadianRoute
+  '/notulen': typeof AuthenticatedNotulenRoute
+  '/peta': typeof AuthenticatedPetaRoute
+  '/piket': typeof AuthenticatedPiketRoute
+  '/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/anggota': typeof AnggotaRoute
-  '/etik': typeof EtikRoute
-  '/inventaris': typeof InventarisRoute
-  '/kaderisasi': typeof KaderisasiRoute
-  '/kas': typeof KasRoute
-  '/kejadian': typeof KejadianRoute
-  '/notulen': typeof NotulenRoute
-  '/peta': typeof PetaRoute
-  '/piket': typeof PiketRoute
-  '/screening': typeof ScreeningRoute
+  '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/anggota': typeof AuthenticatedAnggotaRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/etik': typeof AuthenticatedEtikRoute
+  '/inventaris': typeof AuthenticatedInventarisRoute
+  '/kaderisasi': typeof AuthenticatedKaderisasiRoute
+  '/kas': typeof AuthenticatedKasRoute
+  '/kejadian': typeof AuthenticatedKejadianRoute
+  '/notulen': typeof AuthenticatedNotulenRoute
+  '/peta': typeof AuthenticatedPetaRoute
+  '/piket': typeof AuthenticatedPiketRoute
+  '/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/anggota': typeof AnggotaRoute
-  '/etik': typeof EtikRoute
-  '/inventaris': typeof InventarisRoute
-  '/kaderisasi': typeof KaderisasiRoute
-  '/kas': typeof KasRoute
-  '/kejadian': typeof KejadianRoute
-  '/notulen': typeof NotulenRoute
-  '/peta': typeof PetaRoute
-  '/piket': typeof PiketRoute
-  '/screening': typeof ScreeningRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/anggota': typeof AuthenticatedAnggotaRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/etik': typeof AuthenticatedEtikRoute
+  '/_authenticated/inventaris': typeof AuthenticatedInventarisRoute
+  '/_authenticated/kaderisasi': typeof AuthenticatedKaderisasiRoute
+  '/_authenticated/kas': typeof AuthenticatedKasRoute
+  '/_authenticated/kejadian': typeof AuthenticatedKejadianRoute
+  '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
+  '/_authenticated/peta': typeof AuthenticatedPetaRoute
+  '/_authenticated/piket': typeof AuthenticatedPiketRoute
+  '/_authenticated/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
+    | '/sitemap.xml'
     | '/anggota'
+    | '/dashboard'
     | '/etik'
     | '/inventaris'
     | '/kaderisasi'
@@ -140,11 +167,13 @@ export interface FileRouteTypes {
     | '/peta'
     | '/piket'
     | '/screening'
-    | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
+    | '/sitemap.xml'
     | '/anggota'
+    | '/dashboard'
     | '/etik'
     | '/inventaris'
     | '/kaderisasi'
@@ -154,35 +183,29 @@ export interface FileRouteTypes {
     | '/peta'
     | '/piket'
     | '/screening'
-    | '/sitemap.xml'
   id:
     | '__root__'
     | '/'
-    | '/anggota'
-    | '/etik'
-    | '/inventaris'
-    | '/kaderisasi'
-    | '/kas'
-    | '/kejadian'
-    | '/notulen'
-    | '/peta'
-    | '/piket'
-    | '/screening'
+    | '/_authenticated'
+    | '/auth'
     | '/sitemap.xml'
+    | '/_authenticated/anggota'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/etik'
+    | '/_authenticated/inventaris'
+    | '/_authenticated/kaderisasi'
+    | '/_authenticated/kas'
+    | '/_authenticated/kejadian'
+    | '/_authenticated/notulen'
+    | '/_authenticated/peta'
+    | '/_authenticated/piket'
+    | '/_authenticated/screening'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnggotaRoute: typeof AnggotaRoute
-  EtikRoute: typeof EtikRoute
-  InventarisRoute: typeof InventarisRoute
-  KaderisasiRoute: typeof KaderisasiRoute
-  KasRoute: typeof KasRoute
-  KejadianRoute: typeof KejadianRoute
-  NotulenRoute: typeof NotulenRoute
-  PetaRoute: typeof PetaRoute
-  PiketRoute: typeof PiketRoute
-  ScreeningRoute: typeof ScreeningRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -195,74 +218,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/screening': {
-      id: '/screening'
-      path: '/screening'
-      fullPath: '/screening'
-      preLoaderRoute: typeof ScreeningRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/piket': {
-      id: '/piket'
-      path: '/piket'
-      fullPath: '/piket'
-      preLoaderRoute: typeof PiketRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/peta': {
-      id: '/peta'
-      path: '/peta'
-      fullPath: '/peta'
-      preLoaderRoute: typeof PetaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notulen': {
-      id: '/notulen'
-      path: '/notulen'
-      fullPath: '/notulen'
-      preLoaderRoute: typeof NotulenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kejadian': {
-      id: '/kejadian'
-      path: '/kejadian'
-      fullPath: '/kejadian'
-      preLoaderRoute: typeof KejadianRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kas': {
-      id: '/kas'
-      path: '/kas'
-      fullPath: '/kas'
-      preLoaderRoute: typeof KasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kaderisasi': {
-      id: '/kaderisasi'
-      path: '/kaderisasi'
-      fullPath: '/kaderisasi'
-      preLoaderRoute: typeof KaderisasiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/inventaris': {
-      id: '/inventaris'
-      path: '/inventaris'
-      fullPath: '/inventaris'
-      preLoaderRoute: typeof InventarisRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/etik': {
-      id: '/etik'
-      path: '/etik'
-      fullPath: '/etik'
-      preLoaderRoute: typeof EtikRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/anggota': {
-      id: '/anggota'
-      path: '/anggota'
-      fullPath: '/anggota'
-      preLoaderRoute: typeof AnggotaRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -272,21 +239,121 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/screening': {
+      id: '/_authenticated/screening'
+      path: '/screening'
+      fullPath: '/screening'
+      preLoaderRoute: typeof AuthenticatedScreeningRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/piket': {
+      id: '/_authenticated/piket'
+      path: '/piket'
+      fullPath: '/piket'
+      preLoaderRoute: typeof AuthenticatedPiketRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/peta': {
+      id: '/_authenticated/peta'
+      path: '/peta'
+      fullPath: '/peta'
+      preLoaderRoute: typeof AuthenticatedPetaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notulen': {
+      id: '/_authenticated/notulen'
+      path: '/notulen'
+      fullPath: '/notulen'
+      preLoaderRoute: typeof AuthenticatedNotulenRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/kejadian': {
+      id: '/_authenticated/kejadian'
+      path: '/kejadian'
+      fullPath: '/kejadian'
+      preLoaderRoute: typeof AuthenticatedKejadianRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/kas': {
+      id: '/_authenticated/kas'
+      path: '/kas'
+      fullPath: '/kas'
+      preLoaderRoute: typeof AuthenticatedKasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/kaderisasi': {
+      id: '/_authenticated/kaderisasi'
+      path: '/kaderisasi'
+      fullPath: '/kaderisasi'
+      preLoaderRoute: typeof AuthenticatedKaderisasiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/inventaris': {
+      id: '/_authenticated/inventaris'
+      path: '/inventaris'
+      fullPath: '/inventaris'
+      preLoaderRoute: typeof AuthenticatedInventarisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/etik': {
+      id: '/_authenticated/etik'
+      path: '/etik'
+      fullPath: '/etik'
+      preLoaderRoute: typeof AuthenticatedEtikRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/anggota': {
+      id: '/_authenticated/anggota'
+      path: '/anggota'
+      fullPath: '/anggota'
+      preLoaderRoute: typeof AuthenticatedAnggotaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnggotaRoute: typeof AuthenticatedAnggotaRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEtikRoute: typeof AuthenticatedEtikRoute
+  AuthenticatedInventarisRoute: typeof AuthenticatedInventarisRoute
+  AuthenticatedKaderisasiRoute: typeof AuthenticatedKaderisasiRoute
+  AuthenticatedKasRoute: typeof AuthenticatedKasRoute
+  AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRoute
+  AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
+  AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
+  AuthenticatedPiketRoute: typeof AuthenticatedPiketRoute
+  AuthenticatedScreeningRoute: typeof AuthenticatedScreeningRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnggotaRoute: AuthenticatedAnggotaRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEtikRoute: AuthenticatedEtikRoute,
+  AuthenticatedInventarisRoute: AuthenticatedInventarisRoute,
+  AuthenticatedKaderisasiRoute: AuthenticatedKaderisasiRoute,
+  AuthenticatedKasRoute: AuthenticatedKasRoute,
+  AuthenticatedKejadianRoute: AuthenticatedKejadianRoute,
+  AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
+  AuthenticatedPetaRoute: AuthenticatedPetaRoute,
+  AuthenticatedPiketRoute: AuthenticatedPiketRoute,
+  AuthenticatedScreeningRoute: AuthenticatedScreeningRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnggotaRoute: AnggotaRoute,
-  EtikRoute: EtikRoute,
-  InventarisRoute: InventarisRoute,
-  KaderisasiRoute: KaderisasiRoute,
-  KasRoute: KasRoute,
-  KejadianRoute: KejadianRoute,
-  NotulenRoute: NotulenRoute,
-  PetaRoute: PetaRoute,
-  PiketRoute: PiketRoute,
-  ScreeningRoute: ScreeningRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
