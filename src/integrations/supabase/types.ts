@@ -127,6 +127,45 @@ export type Database = {
           },
         ]
       }
+      live_locations: {
+        Row: {
+          accuracy: number | null
+          created_at: string
+          heading: number | null
+          last_seen: string
+          lat: number
+          lng: number
+          on_bit: boolean
+          speed: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accuracy?: number | null
+          created_at?: string
+          heading?: number | null
+          last_seen?: string
+          lat: number
+          lng: number
+          on_bit?: boolean
+          speed?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accuracy?: number | null
+          created_at?: string
+          heading?: number | null
+          last_seen?: string
+          lat?: number
+          lng?: number
+          on_bit?: boolean
+          speed?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           alamat: string | null
