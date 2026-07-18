@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Users,
   Wallet,
@@ -33,10 +35,32 @@ const feed = [
 ];
 
 function Dashboard() {
+  const { user } = Route.useRouteContext();
+  const { data: profile } = useQuery({
+    queryKey: ["profile", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("nama")
+        .eq("id", user!.id)
+        .maybeSingle();
+      return data;
+    },
+  });
+  const displayName =
+    profile?.nama?.split(" ")[0] ||
+    user?.user_metadata?.nama ||
+    user?.user_metadata?.full_name?.split(" ")[0] ||
+    user?.email?.split("@")[0] ||
+    "Rekan";
+  const hour = new Date().getHours();
+  const salam =
+    hour < 11 ? "Selamat pagi" : hour < 15 ? "Selamat siang" : hour < 18 ? "Selamat sore" : "Selamat malam";
   return (
     <PageShell
       eyebrow="Dashboard komunitas"
-      title="Selamat pagi, Bang Parjo"
+      title={`${salam}, ${displayName}`}
       description="Ringkasan operasional DRG hari ini — kas, kejadian, dan piket dalam satu layar."
       actions={
         <>
