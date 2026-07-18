@@ -1,0 +1,17 @@
+{
+  "name": "DRG App — Komunitas Driver Riang Gembira",
+  "short_name": "DRG",
+  "description": "Platform operasional Komunitas DRG: anggota, kas, SOS, peta live, piket & kaderisasi.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf7f2",
+  "theme_color": "#c14a2a",
+  "lang": "id",
+  "categories": ["social", "productivity", "utilities"],
+  "icons": [
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

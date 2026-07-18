@@ -4,7 +4,9 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { UserMenu } from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
-import { Siren } from "lucide-react";
+import { Siren, Radio, RadioTower } from "lucide-react";
+import { useLiveLocation } from "@/hooks/use-live-location";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -17,6 +19,8 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthedLayout() {
+  const { user } = Route.useRouteContext();
+  const { onBit, setOnBit, error, hydrated } = useLiveLocation(user?.id);
   const today = new Intl.DateTimeFormat("id-ID", {
     weekday: "long",
     day: "numeric",
@@ -38,6 +42,36 @@ function AuthedLayout() {
               <span className="hidden sm:inline text-xs capitalize text-muted-foreground">
                 {today}
               </span>
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !onBit;
+                  setOnBit(next);
+                  toast[next ? "success" : "message"](
+                    next ? "On-Bit aktif — lokasi live dibagikan" : "On-Bit dimatikan — lokasi berhenti",
+                  );
+                }}
+                title={
+                  hydrated
+                    ? onBit
+                      ? "Ngebit — lokasi live aktif. Klik untuk berhenti."
+                      : "Off-Bit — klik untuk mulai share lokasi."
+                    : "Memuat GPS…"
+                }
+                className={
+                  "hidden sm:inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider transition " +
+                  (onBit
+                    ? "border-success/40 bg-success/10 text-success"
+                    : "border-border bg-muted text-muted-foreground")
+                }
+              >
+                {onBit ? (
+                  <RadioTower className="h-3 w-3 animate-pulse" />
+                ) : (
+                  <Radio className="h-3 w-3" />
+                )}
+                {onBit ? "On-Bit" : "Off-Bit"}
+              </button>
               <Button
                 asChild
                 size="sm"
@@ -50,6 +84,11 @@ function AuthedLayout() {
               <UserMenu />
             </div>
           </header>
+          {onBit && error ? (
+            <div className="border-b border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-center text-[11px] text-amber-800 md:px-6">
+              GPS tidak bisa diakses: {error}. Cek izin lokasi browser.
+            </div>
+          ) : null}
           <main className="flex-1">
             <Outlet />
           </main>
