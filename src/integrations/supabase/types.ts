@@ -130,34 +130,52 @@ export type Database = {
       profiles: {
         Row: {
           alamat: string | null
+          bio: string | null
           created_at: string
+          email: string | null
           foto_url: string | null
           id: string
           jenjang: Database["public"]["Enums"]["jenjang_anggota"]
           nama: string
           no_hp: string | null
+          notif_email: boolean
+          notif_kas: boolean
+          notif_pengumuman: boolean
+          notif_sos: boolean
           status: Database["public"]["Enums"]["status_anggota"]
           updated_at: string
         }
         Insert: {
           alamat?: string | null
+          bio?: string | null
           created_at?: string
+          email?: string | null
           foto_url?: string | null
           id: string
           jenjang?: Database["public"]["Enums"]["jenjang_anggota"]
           nama?: string
           no_hp?: string | null
+          notif_email?: boolean
+          notif_kas?: boolean
+          notif_pengumuman?: boolean
+          notif_sos?: boolean
           status?: Database["public"]["Enums"]["status_anggota"]
           updated_at?: string
         }
         Update: {
           alamat?: string | null
+          bio?: string | null
           created_at?: string
+          email?: string | null
           foto_url?: string | null
           id?: string
           jenjang?: Database["public"]["Enums"]["jenjang_anggota"]
           nama?: string
           no_hp?: string | null
+          notif_email?: boolean
+          notif_kas?: boolean
+          notif_pengumuman?: boolean
+          notif_sos?: boolean
           status?: Database["public"]["Enums"]["status_anggota"]
           updated_at?: string
         }

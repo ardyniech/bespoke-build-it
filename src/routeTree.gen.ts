@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedScreeningRouteImport } from './routes/_authenticated/screening'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedPiketRouteImport } from './routes/_authenticated/piket'
 import { Route as AuthenticatedPetaRouteImport } from './routes/_authenticated/peta'
 import { Route as AuthenticatedNotulenRouteImport } from './routes/_authenticated/notulen'
@@ -47,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthenticatedScreeningRoute = AuthenticatedScreeningRouteImport.update({
   id: '/screening',
   path: '/screening',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPiketRoute = AuthenticatedPiketRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
   '/piket': typeof AuthenticatedPiketRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRoutesByTo {
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
   '/piket': typeof AuthenticatedPiketRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRoutesById {
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
   '/_authenticated/peta': typeof AuthenticatedPetaRoute
   '/_authenticated/piket': typeof AuthenticatedPiketRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRouteTypes {
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/notulen'
     | '/peta'
     | '/piket'
+    | '/profil'
     | '/screening'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/notulen'
     | '/peta'
     | '/piket'
+    | '/profil'
     | '/screening'
   id:
     | '__root__'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/_authenticated/notulen'
     | '/_authenticated/peta'
     | '/_authenticated/piket'
+    | '/_authenticated/profil'
     | '/_authenticated/screening'
   fileRoutesById: FileRoutesById
 }
@@ -244,6 +256,13 @@ declare module '@tanstack/react-router' {
       path: '/screening'
       fullPath: '/screening'
       preLoaderRoute: typeof AuthenticatedScreeningRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/piket': {
@@ -330,6 +349,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
   AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
   AuthenticatedPiketRoute: typeof AuthenticatedPiketRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedScreeningRoute: typeof AuthenticatedScreeningRoute
 }
 
@@ -344,6 +364,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
   AuthenticatedPetaRoute: AuthenticatedPetaRoute,
   AuthenticatedPiketRoute: AuthenticatedPiketRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedScreeningRoute: AuthenticatedScreeningRoute,
 }
 
