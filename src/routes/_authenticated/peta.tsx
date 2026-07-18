@@ -17,7 +17,7 @@ type LiveRow = {
   lng: number;
   on_bit: boolean;
   last_seen: string;
-  profiles?: { nama: string | null } | null;
+  nama?: string | null;
 };
 
 function timeAgo(iso: string) {
@@ -43,10 +43,18 @@ function PetaPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("live_locations")
-        .select("user_id, lat, lng, on_bit, last_seen, profiles(nama)")
+        .select("user_id, lat, lng, on_bit, last_seen")
         .order("last_seen", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as unknown as LiveRow[];
+      const locs = (data ?? []) as LiveRow[];
+      const ids = locs.map((l) => l.user_id);
+      if (ids.length === 0) return locs;
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, nama")
+        .in("id", ids);
+      const map = new Map((profs ?? []).map((p) => [p.id, p.nama]));
+      return locs.map((l) => ({ ...l, nama: map.get(l.user_id) ?? null }));
     },
     refetchInterval: 30_000,
   });
@@ -130,7 +138,7 @@ function PetaPage() {
                   key={p.user_id}
                   className="absolute -translate-x-1/2 -translate-y-1/2"
                   style={{ top: pos.top, left: pos.left }}
-                  title={`${p.profiles?.nama ?? "Anggota"} · ${timeAgo(p.last_seen)}`}
+                  title={`${p.nama ?? "Anggota"} · ${timeAgo(p.last_seen)}`}
                 >
                   <div
                     className={
@@ -182,7 +190,7 @@ function PetaPage() {
                       </div>
                       <div>
                         <div className="text-sm font-semibold">
-                          {r.profiles?.nama ?? "Anggota"}
+                          {r.nama ?? "Anggota"}
                           {isMe && (
                             <span className="ml-1 text-xs text-muted-foreground">(Anda)</span>
                           )}
