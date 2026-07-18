@@ -16,7 +16,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedScreeningRouteImport } from './routes/_authenticated/screening'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedPiketRouteImport } from './routes/_authenticated/piket'
-import { Route as AuthenticatedPetaRouteImport } from './routes/_authenticated/peta'
 import { Route as AuthenticatedNotulenRouteImport } from './routes/_authenticated/notulen'
 import { Route as AuthenticatedKejadianRouteImport } from './routes/_authenticated/kejadian'
 import { Route as AuthenticatedKasRouteImport } from './routes/_authenticated/kas'
@@ -58,11 +57,6 @@ const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
 const AuthenticatedPiketRoute = AuthenticatedPiketRouteImport.update({
   id: '/piket',
   path: '/piket',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedPetaRoute = AuthenticatedPetaRouteImport.update({
-  id: '/peta',
-  path: '/peta',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedNotulenRoute = AuthenticatedNotulenRouteImport.update({
@@ -118,7 +112,6 @@ export interface FileRoutesByFullPath {
   '/kas': typeof AuthenticatedKasRoute
   '/kejadian': typeof AuthenticatedKejadianRoute
   '/notulen': typeof AuthenticatedNotulenRoute
-  '/peta': typeof AuthenticatedPetaRoute
   '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
@@ -135,7 +128,6 @@ export interface FileRoutesByTo {
   '/kas': typeof AuthenticatedKasRoute
   '/kejadian': typeof AuthenticatedKejadianRoute
   '/notulen': typeof AuthenticatedNotulenRoute
-  '/peta': typeof AuthenticatedPetaRoute
   '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
@@ -154,7 +146,6 @@ export interface FileRoutesById {
   '/_authenticated/kas': typeof AuthenticatedKasRoute
   '/_authenticated/kejadian': typeof AuthenticatedKejadianRoute
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
-  '/_authenticated/peta': typeof AuthenticatedPetaRoute
   '/_authenticated/piket': typeof AuthenticatedPiketRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/screening': typeof AuthenticatedScreeningRoute
@@ -173,7 +164,6 @@ export interface FileRouteTypes {
     | '/kas'
     | '/kejadian'
     | '/notulen'
-    | '/peta'
     | '/piket'
     | '/profil'
     | '/screening'
@@ -190,7 +180,6 @@ export interface FileRouteTypes {
     | '/kas'
     | '/kejadian'
     | '/notulen'
-    | '/peta'
     | '/piket'
     | '/profil'
     | '/screening'
@@ -208,7 +197,6 @@ export interface FileRouteTypes {
     | '/_authenticated/kas'
     | '/_authenticated/kejadian'
     | '/_authenticated/notulen'
-    | '/_authenticated/peta'
     | '/_authenticated/piket'
     | '/_authenticated/profil'
     | '/_authenticated/screening'
@@ -270,13 +258,6 @@ declare module '@tanstack/react-router' {
       path: '/piket'
       fullPath: '/piket'
       preLoaderRoute: typeof AuthenticatedPiketRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/peta': {
-      id: '/_authenticated/peta'
-      path: '/peta'
-      fullPath: '/peta'
-      preLoaderRoute: typeof AuthenticatedPetaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/notulen': {
@@ -347,7 +328,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedKasRoute: typeof AuthenticatedKasRoute
   AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRoute
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
-  AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
   AuthenticatedPiketRoute: typeof AuthenticatedPiketRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedScreeningRoute: typeof AuthenticatedScreeningRoute
@@ -362,7 +342,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedKasRoute: AuthenticatedKasRoute,
   AuthenticatedKejadianRoute: AuthenticatedKejadianRoute,
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
-  AuthenticatedPetaRoute: AuthenticatedPetaRoute,
   AuthenticatedPiketRoute: AuthenticatedPiketRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedScreeningRoute: AuthenticatedScreeningRoute,
