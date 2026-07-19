@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as DaftarRouteImport } from './routes/daftar'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ import { Route as AuthenticatedAnggotaRouteImport } from './routes/_authenticate
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DaftarRoute = DaftarRouteImport.update({
+  id: '/daftar',
+  path: '/daftar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -109,6 +115,7 @@ const AuthenticatedAnggotaRoute = AuthenticatedAnggotaRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/daftar': typeof DaftarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/anggota': typeof AuthenticatedAnggotaRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/daftar': typeof DaftarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/anggota': typeof AuthenticatedAnggotaRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/daftar': typeof DaftarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/anggota': typeof AuthenticatedAnggotaRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/daftar'
     | '/sitemap.xml'
     | '/anggota'
     | '/dashboard'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/daftar'
     | '/sitemap.xml'
     | '/anggota'
     | '/dashboard'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/daftar'
     | '/sitemap.xml'
     | '/_authenticated/anggota'
     | '/_authenticated/dashboard'
@@ -218,6 +230,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DaftarRoute: typeof DaftarRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/daftar': {
+      id: '/daftar'
+      path: '/daftar'
+      fullPath: '/daftar'
+      preLoaderRoute: typeof DaftarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -375,6 +395,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  DaftarRoute: DaftarRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
