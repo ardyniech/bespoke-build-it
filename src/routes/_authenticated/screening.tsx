@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
@@ -133,9 +133,9 @@ function ReviewDialog({ app, onClose }: { app: App | null; onClose: () => void }
     },
   });
 
-  useState(() => {
+  useEffect(() => {
     if (app) { setStatus(app.status); setCatatan(app.catatan_pic ?? ""); }
-  });
+  }, [app]);
 
   const save = useMutation({
     mutationFn: async () => {
