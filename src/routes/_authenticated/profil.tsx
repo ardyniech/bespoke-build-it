@@ -20,7 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Upload, User as UserIcon, KeyRound, BellRing } from "lucide-react";
+import { Loader2, Upload, User as UserIcon, KeyRound, BellRing, Bell } from "lucide-react";
+import { usePush } from "@/hooks/use-push";
 
 export const Route = createFileRoute("/_authenticated/profil")({
   component: ProfilPage,
