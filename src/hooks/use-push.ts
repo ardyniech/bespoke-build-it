@@ -33,9 +33,10 @@ export function usePush() {
       const reg = (await navigator.serviceWorker.getRegistration()) ??
         (await navigator.serviceWorker.register("/sw.js"));
       await navigator.serviceWorker.ready;
+      const key = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+        applicationServerKey: key.buffer.slice(key.byteOffset, key.byteOffset + key.byteLength) as ArrayBuffer,
       });
       const json = sub.toJSON();
       const { data: u } = await supabase.auth.getUser();
