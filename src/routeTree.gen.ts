@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
+import { Route as AuthenticatedPiketRouteImport } from './routes/_authenticated/piket'
 import { Route as AuthenticatedPetaRouteImport } from './routes/_authenticated/peta'
 import { Route as AuthenticatedNotulenRouteImport } from './routes/_authenticated/notulen'
 import { Route as AuthenticatedKejadianRouteImport } from './routes/_authenticated/kejadian'
@@ -45,6 +46,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPiketRoute = AuthenticatedPiketRouteImport.update({
+  id: '/piket',
+  path: '/piket',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPetaRoute = AuthenticatedPetaRouteImport.update({
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/kejadian': typeof AuthenticatedKejadianRoute
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
+  '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
 }
 export interface FileRoutesByTo {
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/kejadian': typeof AuthenticatedKejadianRoute
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
+  '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
 }
 export interface FileRoutesById {
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/_authenticated/kejadian': typeof AuthenticatedKejadianRoute
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
   '/_authenticated/peta': typeof AuthenticatedPetaRoute
+  '/_authenticated/piket': typeof AuthenticatedPiketRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
 }
 export interface FileRouteTypes {
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/kejadian'
     | '/notulen'
     | '/peta'
+    | '/piket'
     | '/profil'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/kejadian'
     | '/notulen'
     | '/peta'
+    | '/piket'
     | '/profil'
   id:
     | '__root__'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/_authenticated/kejadian'
     | '/_authenticated/notulen'
     | '/_authenticated/peta'
+    | '/_authenticated/piket'
     | '/_authenticated/profil'
   fileRoutesById: FileRoutesById
 }
@@ -220,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/profil'
       fullPath: '/profil'
       preLoaderRoute: typeof AuthenticatedProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/piket': {
+      id: '/_authenticated/piket'
+      path: '/piket'
+      fullPath: '/piket'
+      preLoaderRoute: typeof AuthenticatedPiketRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/peta': {
@@ -290,6 +309,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRoute
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
   AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
+  AuthenticatedPiketRoute: typeof AuthenticatedPiketRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
 }
 
@@ -302,6 +322,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedKejadianRoute: AuthenticatedKejadianRoute,
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
   AuthenticatedPetaRoute: AuthenticatedPetaRoute,
+  AuthenticatedPiketRoute: AuthenticatedPiketRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
 }
 
