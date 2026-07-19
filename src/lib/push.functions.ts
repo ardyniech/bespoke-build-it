@@ -6,13 +6,13 @@ export const notifySosPush = createServerFn({ method: "POST" })
   .inputValidator((input: { kejadianId: string; title?: string; body?: string; url?: string }) => input)
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { ApplicationServerKeys, buildPushPayload } = await import(
-      "@block65/webcrypto-web-push"
-    );
+    const { buildPushPayload } = await import("@block65/webcrypto-web-push");
 
-    const publicKey = process.env.VAPID_PUBLIC_KEY!;
-    const privateKey = process.env.VAPID_PRIVATE_KEY!;
-    const subject = process.env.VAPID_SUBJECT ?? "mailto:admin@drg.app";
+    const vapid = {
+      publicKey: process.env.VAPID_PUBLIC_KEY,
+      privateKey: process.env.VAPID_PRIVATE_KEY,
+      subject: process.env.VAPID_SUBJECT ?? "mailto:admin@drg.app",
+    };
 
     const { data: subs, error } = await supabaseAdmin
       .from("push_subscriptions")
@@ -31,11 +31,6 @@ export const notifySosPush = createServerFn({ method: "POST" })
     // Reporter tidak perlu notif ke diri sendiri
     const targets = subs.filter((s) => allow.has(s.user_id) && s.user_id !== context.userId);
 
-    const keys = await ApplicationServerKeys.fromJSON({
-      publicKey,
-      privateKey,
-    });
-
     const payload = JSON.stringify({
       title: data.title ?? "🚨 SOS DRG",
       body: data.body ?? "Rekan butuh bantuan sekarang.",
@@ -51,17 +46,19 @@ export const notifySosPush = createServerFn({ method: "POST" })
       targets.map(async (s) => {
         try {
           const req = await buildPushPayload(
-            {
-              data: payload,
-              options: { ttl: 60, urgency: "high" },
-            },
+            { data: payload, options: { ttl: 60, urgency: "high" } },
             {
               endpoint: s.endpoint,
+              expirationTime: null,
               keys: { p256dh: s.p256dh, auth: s.auth_key },
             },
-            keys,
+            vapid,
           );
-          const res = await fetch(req);
+          const res = await fetch(s.endpoint, {
+            method: req.method,
+            headers: req.headers as unknown as HeadersInit,
+            body: req.body as unknown as BodyInit,
+          });
           if (res.ok || res.status === 201) sent++;
           else if (res.status === 404 || res.status === 410) {
             stale.push(s.endpoint);
