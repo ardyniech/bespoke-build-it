@@ -368,6 +368,9 @@ function ProfilPage() {
             </CardContent>
           </Card>
 
+          {/* Push subscription */}
+          <PushCard />
+
           {/* Password */}
           <Card className="lg:col-span-1">
             <CardHeader>
