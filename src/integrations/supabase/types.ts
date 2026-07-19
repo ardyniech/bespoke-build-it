@@ -166,6 +166,42 @@ export type Database = {
         }
         Relationships: []
       }
+      piket_shifts: {
+        Row: {
+          catatan: string | null
+          created_at: string
+          created_by: string
+          id: string
+          slot: Database["public"]["Enums"]["piket_shift_slot"]
+          tanggal: string
+          updated_at: string
+          user_id: string
+          wilayah: string
+        }
+        Insert: {
+          catatan?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          slot: Database["public"]["Enums"]["piket_shift_slot"]
+          tanggal: string
+          updated_at?: string
+          user_id: string
+          wilayah: string
+        }
+        Update: {
+          catatan?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          slot?: Database["public"]["Enums"]["piket_shift_slot"]
+          tanggal?: string
+          updated_at?: string
+          user_id?: string
+          wilayah?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           alamat: string | null
@@ -220,6 +256,175 @@ export type Database = {
         }
         Relationships: []
       }
+      push_subscriptions: {
+        Row: {
+          auth_key: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth_key: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth_key?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      screening_answers: {
+        Row: {
+          application_id: string
+          bobot_didapat: number
+          created_at: string
+          id: string
+          jawaban: string | null
+          question_id: string
+        }
+        Insert: {
+          application_id: string
+          bobot_didapat?: number
+          created_at?: string
+          id?: string
+          jawaban?: string | null
+          question_id: string
+        }
+        Update: {
+          application_id?: string
+          bobot_didapat?: number
+          created_at?: string
+          id?: string
+          jawaban?: string | null
+          question_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "screening_answers_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "screening_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "screening_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "screening_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "screening_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "screening_questions_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      screening_applications: {
+        Row: {
+          alamat: string | null
+          catatan_pic: string | null
+          created_at: string
+          email: string | null
+          id: string
+          kota: string | null
+          motivasi: string | null
+          nama: string
+          no_hp: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          skor_total: number | null
+          status: Database["public"]["Enums"]["screening_status"]
+          updated_at: string
+        }
+        Insert: {
+          alamat?: string | null
+          catatan_pic?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          kota?: string | null
+          motivasi?: string | null
+          nama: string
+          no_hp: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          skor_total?: number | null
+          status?: Database["public"]["Enums"]["screening_status"]
+          updated_at?: string
+        }
+        Update: {
+          alamat?: string | null
+          catatan_pic?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          kota?: string | null
+          motivasi?: string | null
+          nama?: string
+          no_hp?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          skor_total?: number | null
+          status?: Database["public"]["Enums"]["screening_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      screening_questions: {
+        Row: {
+          aktif: boolean
+          bobot_max: number
+          created_at: string
+          id: string
+          opsi: Json | null
+          pertanyaan: string
+          tipe: string
+          updated_at: string
+          urutan: number
+        }
+        Insert: {
+          aktif?: boolean
+          bobot_max?: number
+          created_at?: string
+          id?: string
+          opsi?: Json | null
+          pertanyaan: string
+          tipe?: string
+          updated_at?: string
+          urutan?: number
+        }
+        Update: {
+          aktif?: boolean
+          bobot_max?: number
+          created_at?: string
+          id?: string
+          opsi?: Json | null
+          pertanyaan?: string
+          tipe?: string
+          updated_at?: string
+          urutan?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -243,7 +448,30 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      screening_questions_public: {
+        Row: {
+          id: string | null
+          opsi: Json | null
+          pertanyaan: string | null
+          tipe: string | null
+          urutan: number | null
+        }
+        Insert: {
+          id?: string | null
+          opsi?: never
+          pertanyaan?: string | null
+          tipe?: string | null
+          urutan?: number | null
+        }
+        Update: {
+          id?: string | null
+          opsi?: never
+          pertanyaan?: string | null
+          tipe?: string | null
+          urutan?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
@@ -261,6 +489,12 @@ export type Database = {
       kas_ledger: "umum" | "sosial"
       kejadian_status: "open" | "on_progress" | "closed"
       kejadian_tipe: "sos" | "laka" | "mogok" | "lain"
+      piket_shift_slot: "pagi" | "siang" | "malam"
+      screening_status:
+        | "menunggu"
+        | "wawancara"
+        | "direkomendasikan"
+        | "ditolak"
       status_anggota: "aktif" | "nonaktif" | "cuti"
     }
     CompositeTypes: {
@@ -395,6 +629,13 @@ export const Constants = {
       kas_ledger: ["umum", "sosial"],
       kejadian_status: ["open", "on_progress", "closed"],
       kejadian_tipe: ["sos", "laka", "mogok", "lain"],
+      piket_shift_slot: ["pagi", "siang", "malam"],
+      screening_status: [
+        "menunggu",
+        "wawancara",
+        "direkomendasikan",
+        "ditolak",
+      ],
       status_anggota: ["aktif", "nonaktif", "cuti"],
     },
   },

@@ -28,6 +28,8 @@ import { Siren, MapPin, Clock, Loader2, CheckCircle2, HandHelping } from "lucide
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { notifySosPush } from "@/lib/push.functions";
 
 export const Route = createFileRoute("/_authenticated/kejadian")({
   head: () => ({ meta: [{ title: "SOS & Kejadian — DRG App" }] }),
@@ -198,6 +200,7 @@ function KejadianCard({ k }: { k: Kejadian }) {
 
 function SosDialog() {
   const qc = useQueryClient();
+  const notify = useServerFn(notifySosPush);
   const [open, setOpen] = useState(false);
   const [tipe, setTipe] = useState<"sos" | "laka" | "mogok" | "lain">("sos");
   const [deskripsi, setDeskripsi] = useState("");
@@ -217,15 +220,27 @@ function SosDialog() {
     mutationFn: async () => {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) throw new Error("Tidak ada sesi");
-      const { error } = await supabase.from("kejadian").insert({
+      const { data: inserted, error } = await supabase.from("kejadian").insert({
         tipe,
         deskripsi: deskripsi || null,
         alamat_text: alamat || null,
         lokasi_lat: coords?.lat ?? null,
         lokasi_lng: coords?.lng ?? null,
         pelapor_id: u.user.id,
-      });
+      }).select("id").single();
       if (error) throw error;
+      try {
+        await notify({
+          data: {
+            kejadianId: inserted.id,
+            title: `🚨 ${tipe.toUpperCase()} — DRG`,
+            body: `${alamat || "Lokasi tidak dijelaskan"} — ${deskripsi || "butuh bantuan"}`,
+            url: "/kejadian",
+          },
+        });
+      } catch (err) {
+        console.warn("Notif push gagal:", err);
+      }
     },
     onSuccess: () => {
       toast.success("SOS terkirim — Satgas dinotifikasi");
