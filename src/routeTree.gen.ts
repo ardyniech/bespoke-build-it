@@ -13,14 +13,11 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedScreeningRouteImport } from './routes/_authenticated/screening'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
-import { Route as AuthenticatedPiketRouteImport } from './routes/_authenticated/piket'
 import { Route as AuthenticatedPetaRouteImport } from './routes/_authenticated/peta'
 import { Route as AuthenticatedNotulenRouteImport } from './routes/_authenticated/notulen'
 import { Route as AuthenticatedKejadianRouteImport } from './routes/_authenticated/kejadian'
 import { Route as AuthenticatedKasRouteImport } from './routes/_authenticated/kas'
-import { Route as AuthenticatedKaderisasiRouteImport } from './routes/_authenticated/kaderisasi'
 import { Route as AuthenticatedInventarisRouteImport } from './routes/_authenticated/inventaris'
 import { Route as AuthenticatedEtikRouteImport } from './routes/_authenticated/etik'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -45,19 +42,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedScreeningRoute = AuthenticatedScreeningRouteImport.update({
-  id: '/screening',
-  path: '/screening',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedPiketRoute = AuthenticatedPiketRouteImport.update({
-  id: '/piket',
-  path: '/piket',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPetaRoute = AuthenticatedPetaRouteImport.update({
@@ -78,11 +65,6 @@ const AuthenticatedKejadianRoute = AuthenticatedKejadianRouteImport.update({
 const AuthenticatedKasRoute = AuthenticatedKasRouteImport.update({
   id: '/kas',
   path: '/kas',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedKaderisasiRoute = AuthenticatedKaderisasiRouteImport.update({
-  id: '/kaderisasi',
-  path: '/kaderisasi',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedInventarisRoute = AuthenticatedInventarisRouteImport.update({
@@ -114,14 +96,11 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/etik': typeof AuthenticatedEtikRoute
   '/inventaris': typeof AuthenticatedInventarisRoute
-  '/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/kas': typeof AuthenticatedKasRoute
   '/kejadian': typeof AuthenticatedKejadianRoute
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
-  '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
-  '/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -131,14 +110,11 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/etik': typeof AuthenticatedEtikRoute
   '/inventaris': typeof AuthenticatedInventarisRoute
-  '/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/kas': typeof AuthenticatedKasRoute
   '/kejadian': typeof AuthenticatedKejadianRoute
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
-  '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
-  '/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -150,14 +126,11 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/etik': typeof AuthenticatedEtikRoute
   '/_authenticated/inventaris': typeof AuthenticatedInventarisRoute
-  '/_authenticated/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/_authenticated/kas': typeof AuthenticatedKasRoute
   '/_authenticated/kejadian': typeof AuthenticatedKejadianRoute
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
   '/_authenticated/peta': typeof AuthenticatedPetaRoute
-  '/_authenticated/piket': typeof AuthenticatedPiketRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
-  '/_authenticated/screening': typeof AuthenticatedScreeningRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -169,14 +142,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/etik'
     | '/inventaris'
-    | '/kaderisasi'
     | '/kas'
     | '/kejadian'
     | '/notulen'
     | '/peta'
-    | '/piket'
     | '/profil'
-    | '/screening'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -186,14 +156,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/etik'
     | '/inventaris'
-    | '/kaderisasi'
     | '/kas'
     | '/kejadian'
     | '/notulen'
     | '/peta'
-    | '/piket'
     | '/profil'
-    | '/screening'
   id:
     | '__root__'
     | '/'
@@ -204,14 +171,11 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/etik'
     | '/_authenticated/inventaris'
-    | '/_authenticated/kaderisasi'
     | '/_authenticated/kas'
     | '/_authenticated/kejadian'
     | '/_authenticated/notulen'
     | '/_authenticated/peta'
-    | '/_authenticated/piket'
     | '/_authenticated/profil'
-    | '/_authenticated/screening'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -251,25 +215,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/screening': {
-      id: '/_authenticated/screening'
-      path: '/screening'
-      fullPath: '/screening'
-      preLoaderRoute: typeof AuthenticatedScreeningRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/profil': {
       id: '/_authenticated/profil'
       path: '/profil'
       fullPath: '/profil'
       preLoaderRoute: typeof AuthenticatedProfilRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/piket': {
-      id: '/_authenticated/piket'
-      path: '/piket'
-      fullPath: '/piket'
-      preLoaderRoute: typeof AuthenticatedPiketRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/peta': {
@@ -298,13 +248,6 @@ declare module '@tanstack/react-router' {
       path: '/kas'
       fullPath: '/kas'
       preLoaderRoute: typeof AuthenticatedKasRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/kaderisasi': {
-      id: '/_authenticated/kaderisasi'
-      path: '/kaderisasi'
-      fullPath: '/kaderisasi'
-      preLoaderRoute: typeof AuthenticatedKaderisasiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/inventaris': {
@@ -343,14 +286,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEtikRoute: typeof AuthenticatedEtikRoute
   AuthenticatedInventarisRoute: typeof AuthenticatedInventarisRoute
-  AuthenticatedKaderisasiRoute: typeof AuthenticatedKaderisasiRoute
   AuthenticatedKasRoute: typeof AuthenticatedKasRoute
   AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRoute
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
   AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
-  AuthenticatedPiketRoute: typeof AuthenticatedPiketRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
-  AuthenticatedScreeningRoute: typeof AuthenticatedScreeningRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -358,14 +298,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEtikRoute: AuthenticatedEtikRoute,
   AuthenticatedInventarisRoute: AuthenticatedInventarisRoute,
-  AuthenticatedKaderisasiRoute: AuthenticatedKaderisasiRoute,
   AuthenticatedKasRoute: AuthenticatedKasRoute,
   AuthenticatedKejadianRoute: AuthenticatedKejadianRoute,
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
   AuthenticatedPetaRoute: AuthenticatedPetaRoute,
-  AuthenticatedPiketRoute: AuthenticatedPiketRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
-  AuthenticatedScreeningRoute: AuthenticatedScreeningRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
