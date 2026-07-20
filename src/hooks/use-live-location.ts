@@ -16,12 +16,24 @@ export function useLiveLocation(userId: string | undefined) {
   const [hydrated, setHydrated] = useState(false);
   const [coords, setCoords] = useState<GeolocationCoordinates | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [permission, setPermission] = useState<PermissionState | "unsupported" | "unknown">("unknown");
+  const [retryTick, setRetryTick] = useState(0);
   const watchId = useRef<number | null>(null);
   const lastPush = useRef<number>(0);
 
   useEffect(() => {
     setOnBitState(readInitial());
     setHydrated(true);
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setPermission("unsupported");
+      return;
+    }
+    // Permissions API is optional
+    const anyNav = navigator as unknown as { permissions?: { query: (d: { name: string }) => Promise<PermissionStatus> } };
+    anyNav.permissions?.query({ name: "geolocation" }).then((res) => {
+      setPermission(res.state);
+      res.onchange = () => setPermission(res.state);
+    }).catch(() => setPermission("unknown"));
   }, []);
 
   const setOnBit = useCallback((v: boolean) => {
@@ -71,6 +83,7 @@ export function useLiveLocation(userId: string | undefined) {
     }
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       setError("Perangkat tidak mendukung GPS");
+      setPermission("unsupported");
       return;
     }
     const opts: PositionOptions = {
@@ -82,9 +95,13 @@ export function useLiveLocation(userId: string | undefined) {
       (pos) => {
         setError(null);
         setCoords(pos.coords);
+        setPermission("granted");
         push(pos.coords, true);
       },
-      (err) => setError(err.message),
+      (err) => {
+        setError(err.message);
+        if (err.code === err.PERMISSION_DENIED) setPermission("denied");
+      },
       opts,
     );
     watchId.current = id;
@@ -94,7 +111,12 @@ export function useLiveLocation(userId: string | undefined) {
         watchId.current = null;
       }
     };
-  }, [hydrated, onBit, userId, push]);
+  }, [hydrated, onBit, userId, push, retryTick]);
 
-  return { onBit, setOnBit, coords, error, hydrated };
+  const retry = useCallback(() => {
+    setError(null);
+    setRetryTick((n) => n + 1);
+  }, []);
+
+  return { onBit, setOnBit, coords, error, hydrated, permission, retry };
 }
