@@ -344,6 +344,7 @@ export type Database = {
           catatan_pic: string | null
           created_at: string
           email: string | null
+          email_verified: boolean
           id: string
           kota: string | null
           motivasi: string | null
@@ -354,12 +355,15 @@ export type Database = {
           skor_total: number | null
           status: Database["public"]["Enums"]["screening_status"]
           updated_at: string
+          verified_at: string | null
+          verify_token: string
         }
         Insert: {
           alamat?: string | null
           catatan_pic?: string | null
           created_at?: string
           email?: string | null
+          email_verified?: boolean
           id?: string
           kota?: string | null
           motivasi?: string | null
@@ -370,12 +374,15 @@ export type Database = {
           skor_total?: number | null
           status?: Database["public"]["Enums"]["screening_status"]
           updated_at?: string
+          verified_at?: string | null
+          verify_token?: string
         }
         Update: {
           alamat?: string | null
           catatan_pic?: string | null
           created_at?: string
           email?: string | null
+          email_verified?: boolean
           id?: string
           kota?: string | null
           motivasi?: string | null
@@ -386,8 +393,51 @@ export type Database = {
           skor_total?: number | null
           status?: Database["public"]["Enums"]["screening_status"]
           updated_at?: string
+          verified_at?: string | null
+          verify_token?: string
         }
         Relationships: []
+      }
+      screening_audit_log: {
+        Row: {
+          actor_id: string | null
+          actor_nama: string | null
+          application_id: string
+          catatan: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["screening_status"] | null
+          id: string
+          to_status: Database["public"]["Enums"]["screening_status"]
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_nama?: string | null
+          application_id: string
+          catatan?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["screening_status"] | null
+          id?: string
+          to_status: Database["public"]["Enums"]["screening_status"]
+        }
+        Update: {
+          actor_id?: string | null
+          actor_nama?: string | null
+          application_id?: string
+          catatan?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["screening_status"] | null
+          id?: string
+          to_status?: Database["public"]["Enums"]["screening_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "screening_audit_log_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "screening_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       screening_questions: {
         Row: {
@@ -474,6 +524,18 @@ export type Database = {
       }
     }
     Functions: {
+      get_application_status: {
+        Args: { _token: string }
+        Returns: {
+          catatan_pic: string
+          created_at: string
+          email_verified: boolean
+          id: string
+          nama: string
+          reviewed_at: string
+          status: Database["public"]["Enums"]["screening_status"]
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -481,6 +543,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      verify_application_email: { Args: { _token: string }; Returns: boolean }
     }
     Enums: {
       app_role: "super_admin" | "admin" | "bendahara" | "satgas" | "anggota"
