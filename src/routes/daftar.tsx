@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, CheckCircle2, ShieldCheck } from "lucide-react";
+import { Loader2, CheckCircle2, ShieldCheck, MailCheck, Copy } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/daftar")({
@@ -36,10 +36,10 @@ function DaftarPage() {
 
   const [form, setForm] = useState({ nama: "", no_hp: "", email: "", alamat: "", kota: "", motivasi: "" });
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<{ token: string } | null>(null);
 
   const canSubmit = useMemo(
-    () => form.nama.trim().length > 2 && form.no_hp.trim().length > 6,
+    () => form.nama.trim().length > 2 && form.no_hp.trim().length > 6 && /.+@.+\..+/.test(form.email.trim()),
     [form],
   );
 
@@ -48,11 +48,11 @@ function DaftarPage() {
       const { data: app, error } = await supabase.from("screening_applications").insert({
         nama: form.nama.trim(),
         no_hp: form.no_hp.trim(),
-        email: form.email.trim() || null,
+        email: form.email.trim(),
         alamat: form.alamat.trim() || null,
         kota: form.kota.trim() || null,
         motivasi: form.motivasi.trim() || null,
-      }).select("id").single();
+      }).select("id, verify_token").single();
       if (error) throw error;
 
       const rows = questions
@@ -62,22 +62,52 @@ function DaftarPage() {
         const { error: e2 } = await supabase.from("screening_answers").insert(rows);
         if (e2) throw e2;
       }
+      return app.verify_token as string;
     },
-    onSuccess: () => setDone(true),
+    onSuccess: (token) => setDone({ token }),
     onError: (e: Error) => toast.error("Gagal mengirim", { description: e.message }),
   });
 
   if (done) {
+    const verifyUrl = `${window.location.origin}/verifikasi/${done.token}`;
+    const statusUrl = `${window.location.origin}/status/${done.token}`;
     return (
-      <div className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center px-4 text-center">
-        <div className="grid h-16 w-16 place-items-center rounded-full bg-success/15 text-success">
-          <CheckCircle2 className="h-8 w-8" />
+      <div className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center px-4 py-10 text-center">
+        <div className="grid h-16 w-16 place-items-center rounded-full bg-primary/15 text-primary">
+          <MailCheck className="h-8 w-8" />
         </div>
-        <h1 className="mt-4 font-display text-2xl font-bold">Terima kasih!</h1>
+        <h1 className="mt-4 font-display text-2xl font-bold">Verifikasi email kamu</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Formulir kamu sudah masuk. PIC Kaderisasi DRG akan menghubungi via WhatsApp untuk tahap berikutnya.
+          Aplikasi diterima. Sebelum PIC memproses, konfirmasi email <b>{form.email}</b> lewat tautan di bawah ini.
         </p>
-        <Button asChild variant="outline" className="mt-6"><Link to="/">Kembali ke Beranda</Link></Button>
+        <div className="mt-6 w-full space-y-3 rounded-2xl border border-border bg-card p-4 text-left">
+          <div>
+            <div className="text-xs font-semibold uppercase text-muted-foreground">Tautan verifikasi</div>
+            <div className="mt-1 flex gap-2">
+              <Input readOnly value={verifyUrl} className="font-mono text-xs" />
+              <Button type="button" variant="outline" size="icon" onClick={() => { navigator.clipboard.writeText(verifyUrl); toast.success("Tersalin"); }}>
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div>
+            <div className="text-xs font-semibold uppercase text-muted-foreground">Cek status kapan pun</div>
+            <div className="mt-1 flex gap-2">
+              <Input readOnly value={statusUrl} className="font-mono text-xs" />
+              <Button type="button" variant="outline" size="icon" onClick={() => { navigator.clipboard.writeText(statusUrl); toast.success("Tersalin"); }}>
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div className="mt-6 flex gap-2">
+          <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Link to="/verifikasi/$token" params={{ token: done.token }}>
+              <CheckCircle2 className="mr-1.5 h-4 w-4" /> Verifikasi sekarang
+            </Link>
+          </Button>
+          <Button asChild variant="outline"><Link to="/status/$token" params={{ token: done.token }}>Lihat status</Link></Button>
+        </div>
       </div>
     );
   }
@@ -105,7 +135,7 @@ function DaftarPage() {
             <Input id="hp" value={form.no_hp} onChange={(e) => setForm({ ...form, no_hp: e.target.value })} placeholder="0812…" required />
           </div>
           <div>
-            <Label htmlFor="em">Email</Label>
+            <Label htmlFor="em">Email *</Label>
             <Input id="em" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
           </div>
           <div className="md:col-span-2">

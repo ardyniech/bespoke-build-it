@@ -14,6 +14,8 @@ import { Route as DaftarRouteImport } from './routes/daftar'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VerifikasiTokenRouteImport } from './routes/verifikasi.$token'
+import { Route as StatusTokenRouteImport } from './routes/status.$token'
 import { Route as AuthenticatedScreeningRouteImport } from './routes/_authenticated/screening'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedPiketRouteImport } from './routes/_authenticated/piket'
@@ -49,6 +51,16 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifikasiTokenRoute = VerifikasiTokenRouteImport.update({
+  id: '/verifikasi/$token',
+  path: '/verifikasi/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusTokenRoute = StatusTokenRouteImport.update({
+  id: '/status/$token',
+  path: '/status/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedScreeningRoute = AuthenticatedScreeningRouteImport.update({
@@ -129,6 +141,8 @@ export interface FileRoutesByFullPath {
   '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
+  '/status/$token': typeof StatusTokenRoute
+  '/verifikasi/$token': typeof VerifikasiTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -147,6 +161,8 @@ export interface FileRoutesByTo {
   '/piket': typeof AuthenticatedPiketRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
+  '/status/$token': typeof StatusTokenRoute
+  '/verifikasi/$token': typeof VerifikasiTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -167,6 +183,8 @@ export interface FileRoutesById {
   '/_authenticated/piket': typeof AuthenticatedPiketRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/screening': typeof AuthenticatedScreeningRoute
+  '/status/$token': typeof StatusTokenRoute
+  '/verifikasi/$token': typeof VerifikasiTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -187,6 +205,8 @@ export interface FileRouteTypes {
     | '/piket'
     | '/profil'
     | '/screening'
+    | '/status/$token'
+    | '/verifikasi/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -205,6 +225,8 @@ export interface FileRouteTypes {
     | '/piket'
     | '/profil'
     | '/screening'
+    | '/status/$token'
+    | '/verifikasi/$token'
   id:
     | '__root__'
     | '/'
@@ -224,6 +246,8 @@ export interface FileRouteTypes {
     | '/_authenticated/piket'
     | '/_authenticated/profil'
     | '/_authenticated/screening'
+    | '/status/$token'
+    | '/verifikasi/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -232,6 +256,8 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DaftarRoute: typeof DaftarRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StatusTokenRoute: typeof StatusTokenRoute
+  VerifikasiTokenRoute: typeof VerifikasiTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -269,6 +295,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verifikasi/$token': {
+      id: '/verifikasi/$token'
+      path: '/verifikasi/$token'
+      fullPath: '/verifikasi/$token'
+      preLoaderRoute: typeof VerifikasiTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/status/$token': {
+      id: '/status/$token'
+      path: '/status/$token'
+      fullPath: '/status/$token'
+      preLoaderRoute: typeof StatusTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/screening': {
@@ -397,6 +437,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DaftarRoute: DaftarRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StatusTokenRoute: StatusTokenRoute,
+  VerifikasiTokenRoute: VerifikasiTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

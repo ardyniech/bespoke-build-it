@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2, Upload, User as UserIcon, KeyRound, BellRing, Bell } from "lucide-react";
 import { usePush } from "@/hooks/use-push";
+import { PermissionOnboarding } from "@/components/permission-onboarding";
 
 export const Route = createFileRoute("/_authenticated/profil")({
   component: ProfilPage,
@@ -168,6 +169,9 @@ function ProfilPage() {
         </div>
       ) : (
         <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-3">
+            <PermissionOnboarding userId={userId ?? undefined} />
+          </div>
           {/* Ringkasan akun */}
           <Card className="lg:col-span-1">
             <CardHeader>
