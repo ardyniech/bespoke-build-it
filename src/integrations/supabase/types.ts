@@ -533,7 +533,7 @@ export type Database = {
           id: string
           nama: string
           reviewed_at: string
-          status: Database["public"]["Enums"]["screening_status"]
+          status: string
         }[]
       }
       has_role: {
