@@ -18,6 +18,7 @@ import { Route as VerifikasiTokenRouteImport } from './routes/verifikasi.$token'
 import { Route as StatusTokenRouteImport } from './routes/status.$token'
 import { Route as AuthenticatedScreeningRouteImport } from './routes/_authenticated/screening'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
+import { Route as AuthenticatedPetaRouteImport } from './routes/_authenticated/peta'
 import { Route as AuthenticatedNotulenRouteImport } from './routes/_authenticated/notulen'
 import { Route as AuthenticatedKaderisasiRouteImport } from './routes/_authenticated/kaderisasi'
 import { Route as AuthenticatedInventarisRouteImport } from './routes/_authenticated/inventaris'
@@ -69,6 +70,11 @@ const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPetaRoute = AuthenticatedPetaRouteImport.update({
+  id: '/peta',
+  path: '/peta',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedNotulenRoute = AuthenticatedNotulenRouteImport.update({
   id: '/notulen',
   path: '/notulen',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/notulen': typeof AuthenticatedNotulenRoute
+  '/peta': typeof AuthenticatedPetaRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/notulen': typeof AuthenticatedNotulenRoute
+  '/peta': typeof AuthenticatedPetaRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/_authenticated/inventaris': typeof AuthenticatedInventarisRoute
   '/_authenticated/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
+  '/_authenticated/peta': typeof AuthenticatedPetaRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/inventaris'
     | '/kaderisasi'
     | '/notulen'
+    | '/peta'
     | '/profil'
     | '/screening'
     | '/status/$token'
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/inventaris'
     | '/kaderisasi'
     | '/notulen'
+    | '/peta'
     | '/profil'
     | '/screening'
     | '/status/$token'
@@ -196,6 +207,7 @@ export interface FileRouteTypes {
     | '/_authenticated/inventaris'
     | '/_authenticated/kaderisasi'
     | '/_authenticated/notulen'
+    | '/_authenticated/peta'
     | '/_authenticated/profil'
     | '/_authenticated/screening'
     | '/status/$token'
@@ -277,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/peta': {
+      id: '/_authenticated/peta'
+      path: '/peta'
+      fullPath: '/peta'
+      preLoaderRoute: typeof AuthenticatedPetaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/notulen': {
       id: '/_authenticated/notulen'
       path: '/notulen'
@@ -329,6 +348,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInventarisRoute: typeof AuthenticatedInventarisRoute
   AuthenticatedKaderisasiRoute: typeof AuthenticatedKaderisasiRoute
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
+  AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedScreeningRoute: typeof AuthenticatedScreeningRoute
 }
@@ -340,6 +360,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInventarisRoute: AuthenticatedInventarisRoute,
   AuthenticatedKaderisasiRoute: AuthenticatedKaderisasiRoute,
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
+  AuthenticatedPetaRoute: AuthenticatedPetaRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedScreeningRoute: AuthenticatedScreeningRoute,
 }

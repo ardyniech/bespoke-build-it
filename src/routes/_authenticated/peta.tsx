@@ -114,15 +114,13 @@ function PetaPage() {
       <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-card shadow-card lg:aspect-auto lg:min-h-[520px]">
           <ClientOnly fallback={<div className="grid h-full place-items-center text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin" /></div>}>
-            {() => (
-              <Suspense fallback={<div className="grid h-full place-items-center text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin" /></div>}>
-                <LiveMap
-                  points={points}
-                  focusId={focusMe ? focusMe.split(":")[0] : undefined}
-                  height="100%"
-                />
-              </Suspense>
-            )}
+            <Suspense fallback={<div className="grid h-full place-items-center text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin" /></div>}>
+              <LiveMap
+                points={points}
+                focusId={focusMe ? focusMe.split(":")[0] : undefined}
+                height="100%"
+              />
+            </Suspense>
           </ClientOnly>
         </div>
 
