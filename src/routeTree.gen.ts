@@ -28,6 +28,7 @@ import { Route as AuthenticatedInventarisRouteImport } from './routes/_authentic
 import { Route as AuthenticatedEtikRouteImport } from './routes/_authenticated/etik'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAnggotaRouteImport } from './routes/_authenticated/anggota'
+import { Route as AuthenticatedKejadianIdRouteImport } from './routes/_authenticated/kejadian.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -123,6 +124,11 @@ const AuthenticatedAnggotaRoute = AuthenticatedAnggotaRouteImport.update({
   path: '/anggota',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedKejadianIdRoute = AuthenticatedKejadianIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedKejadianRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -135,7 +141,7 @@ export interface FileRoutesByFullPath {
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/kas': typeof AuthenticatedKasRoute
-  '/kejadian': typeof AuthenticatedKejadianRoute
+  '/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
   '/piket': typeof AuthenticatedPiketRoute
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
   '/verifikasi/$token': typeof VerifikasiTokenRoute
+  '/kejadian/$id': typeof AuthenticatedKejadianIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -155,7 +162,7 @@ export interface FileRoutesByTo {
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/kas': typeof AuthenticatedKasRoute
-  '/kejadian': typeof AuthenticatedKejadianRoute
+  '/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
   '/piket': typeof AuthenticatedPiketRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
   '/verifikasi/$token': typeof VerifikasiTokenRoute
+  '/kejadian/$id': typeof AuthenticatedKejadianIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -177,7 +185,7 @@ export interface FileRoutesById {
   '/_authenticated/inventaris': typeof AuthenticatedInventarisRoute
   '/_authenticated/kaderisasi': typeof AuthenticatedKaderisasiRoute
   '/_authenticated/kas': typeof AuthenticatedKasRoute
-  '/_authenticated/kejadian': typeof AuthenticatedKejadianRoute
+  '/_authenticated/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
   '/_authenticated/peta': typeof AuthenticatedPetaRoute
   '/_authenticated/piket': typeof AuthenticatedPiketRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/_authenticated/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
   '/verifikasi/$token': typeof VerifikasiTokenRoute
+  '/_authenticated/kejadian/$id': typeof AuthenticatedKejadianIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/screening'
     | '/status/$token'
     | '/verifikasi/$token'
+    | '/kejadian/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -227,6 +237,7 @@ export interface FileRouteTypes {
     | '/screening'
     | '/status/$token'
     | '/verifikasi/$token'
+    | '/kejadian/$id'
   id:
     | '__root__'
     | '/'
@@ -248,6 +259,7 @@ export interface FileRouteTypes {
     | '/_authenticated/screening'
     | '/status/$token'
     | '/verifikasi/$token'
+    | '/_authenticated/kejadian/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -395,8 +407,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAnggotaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/kejadian/$id': {
+      id: '/_authenticated/kejadian/$id'
+      path: '/$id'
+      fullPath: '/kejadian/$id'
+      preLoaderRoute: typeof AuthenticatedKejadianIdRouteImport
+      parentRoute: typeof AuthenticatedKejadianRoute
+    }
   }
 }
+
+interface AuthenticatedKejadianRouteChildren {
+  AuthenticatedKejadianIdRoute: typeof AuthenticatedKejadianIdRoute
+}
+
+const AuthenticatedKejadianRouteChildren: AuthenticatedKejadianRouteChildren = {
+  AuthenticatedKejadianIdRoute: AuthenticatedKejadianIdRoute,
+}
+
+const AuthenticatedKejadianRouteWithChildren =
+  AuthenticatedKejadianRoute._addFileChildren(
+    AuthenticatedKejadianRouteChildren,
+  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnggotaRoute: typeof AuthenticatedAnggotaRoute
@@ -405,7 +437,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInventarisRoute: typeof AuthenticatedInventarisRoute
   AuthenticatedKaderisasiRoute: typeof AuthenticatedKaderisasiRoute
   AuthenticatedKasRoute: typeof AuthenticatedKasRoute
-  AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRoute
+  AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRouteWithChildren
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
   AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
   AuthenticatedPiketRoute: typeof AuthenticatedPiketRoute
@@ -420,7 +452,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInventarisRoute: AuthenticatedInventarisRoute,
   AuthenticatedKaderisasiRoute: AuthenticatedKaderisasiRoute,
   AuthenticatedKasRoute: AuthenticatedKasRoute,
-  AuthenticatedKejadianRoute: AuthenticatedKejadianRoute,
+  AuthenticatedKejadianRoute: AuthenticatedKejadianRouteWithChildren,
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
   AuthenticatedPetaRoute: AuthenticatedPetaRoute,
   AuthenticatedPiketRoute: AuthenticatedPiketRoute,
@@ -443,13 +475,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

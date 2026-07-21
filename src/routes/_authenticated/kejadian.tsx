@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Siren, MapPin, Clock, Loader2, CheckCircle2, HandHelping } from "lucide-react";
+import { Siren, MapPin, Clock, Loader2, Users, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -53,7 +53,6 @@ const statusTone: Record<string, string> = {
   on_progress: "bg-warn text-warn-foreground",
   closed: "bg-success/20 text-success",
 };
-
 const statusLabel: Record<string, string> = {
   open: "Baru",
   on_progress: "Ditangani",
@@ -76,21 +75,38 @@ function KejadianPage() {
     },
   });
 
+  const { data: counts = {} } = useQuery({
+    queryKey: ["kejadian-responder-counts"],
+    queryFn: async () => {
+      const { data } = await supabase.from("kejadian_responders").select("kejadian_id");
+      const m: Record<string, number> = {};
+      (data ?? []).forEach((r) => {
+        m[r.kejadian_id] = (m[r.kejadian_id] ?? 0) + 1;
+      });
+      return m;
+    },
+  });
+
   useEffect(() => {
     const ch = supabase
       .channel("kejadian-rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "kejadian" }, () => {
         qc.invalidateQueries({ queryKey: ["kejadian"] });
       })
+      .on("postgres_changes", { event: "*", schema: "public", table: "kejadian_responders" }, () => {
+        qc.invalidateQueries({ queryKey: ["kejadian-responder-counts"] });
+      })
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [qc]);
 
   return (
     <PageShell
       eyebrow="Satgas"
       title="Log Kejadian Darurat"
-      description="Riwayat SOS realtime — Baru → Ditangani → Selesai."
+      description="Riwayat SOS realtime — Baru → Ditangani → Selesai. Klik kartu untuk detail & respons."
       actions={<SosDialog />}
     >
       {isLoading ? (
@@ -102,99 +118,44 @@ function KejadianPage() {
           Belum ada kejadian. Semoga tetap aman di jalan.
         </div>
       ) : (
-        <div className="space-y-4">
-          {data.map((k) => <KejadianCard key={k.id} k={k} />)}
+        <div className="space-y-3">
+          {data.map((k) => (
+            <Link
+              key={k.id}
+              to="/kejadian/$id"
+              params={{ id: k.id }}
+              className="block overflow-hidden rounded-2xl border border-border bg-card shadow-card transition hover:border-primary/40 hover:shadow-warm"
+            >
+              <div className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
+                <div className="min-w-0">
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="font-mono text-xs uppercase text-muted-foreground">{k.tipe}</span>
+                    <Badge className={statusTone[k.status]}>{statusLabel[k.status]}</Badge>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                      <Users className="h-3 w-3" /> {counts[k.id] ?? 0} responder
+                    </span>
+                  </div>
+                  <h3 className="truncate font-display text-lg font-bold">
+                    {k.deskripsi || "Tanpa deskripsi"}
+                  </h3>
+                  <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" /> {new Date(k.dibuat_at).toLocaleString("id-ID")}
+                    </span>
+                    {k.alamat_text && (
+                      <span className="inline-flex items-center gap-1">
+                        <MapPin className="h-3.5 w-3.5" /> {k.alamat_text}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </PageShell>
-  );
-}
-
-function KejadianCard({ k }: { k: Kejadian }) {
-  const qc = useQueryClient();
-  const respondMut = useMutation({
-    mutationFn: async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) throw new Error("Tidak ada sesi");
-      const { error: e1 } = await supabase.from("kejadian_responders").insert({
-        kejadian_id: k.id, user_id: u.user.id,
-      });
-      if (e1 && !e1.message.includes("duplicate")) throw e1;
-      if (k.status === "open") {
-        const { error } = await supabase
-          .from("kejadian")
-          .update({ status: "on_progress" })
-          .eq("id", k.id);
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => {
-      toast.success("Kamu tercatat sebagai responder");
-      qc.invalidateQueries({ queryKey: ["kejadian"] });
-    },
-    onError: (e: Error) => toast.error("Gagal", { description: e.message }),
-  });
-
-  const closeMut = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase
-        .from("kejadian")
-        .update({ status: "closed", ditutup_at: new Date().toISOString() })
-        .eq("id", k.id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      toast.success("Kejadian ditutup");
-      qc.invalidateQueries({ queryKey: ["kejadian"] });
-    },
-    onError: (e: Error) => toast.error("Gagal menutup", { description: e.message }),
-  });
-
-  return (
-    <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-card">
-      <div className="flex flex-col gap-4 border-b border-border p-5 md:flex-row md:items-center md:justify-between">
-        <div>
-          <div className="mb-1 flex items-center gap-2">
-            <span className="font-mono text-xs uppercase text-muted-foreground">{k.tipe}</span>
-            <Badge className={statusTone[k.status]}>{statusLabel[k.status]}</Badge>
-          </div>
-          <h3 className="font-display text-lg font-bold">{k.deskripsi || "Tanpa deskripsi"}</h3>
-          <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5" /> {new Date(k.dibuat_at).toLocaleString("id-ID")}
-            </span>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          {k.status !== "closed" && (
-            <Button size="sm" variant="outline" onClick={() => respondMut.mutate()} disabled={respondMut.isPending}>
-              <HandHelping className="mr-1.5 h-4 w-4" /> Merespons
-            </Button>
-          )}
-          {k.status !== "closed" && (
-            <Button size="sm" onClick={() => closeMut.mutate()} disabled={closeMut.isPending}
-              className="bg-success text-success-foreground hover:bg-success/90">
-              <CheckCircle2 className="mr-1.5 h-4 w-4" /> Tutup
-            </Button>
-          )}
-        </div>
-      </div>
-      {(k.alamat_text || k.lokasi_lat) && (
-        <div className="p-5 text-sm">
-          <div className="inline-flex items-start gap-2">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-            <span>
-              {k.alamat_text || "Lokasi tidak dijelaskan"}
-              {k.lokasi_lat != null && k.lokasi_lng != null && (
-                <span className="ml-2 font-mono text-xs text-muted-foreground">
-                  ({k.lokasi_lat.toFixed(4)}, {k.lokasi_lng.toFixed(4)})
-                </span>
-              )}
-            </span>
-          </div>
-        </div>
-      )}
-    </article>
   );
 }
 
@@ -211,8 +172,8 @@ function SosDialog() {
     if (!open || !("geolocation" in navigator)) return;
     navigator.geolocation.getCurrentPosition(
       (p) => setCoords({ lat: p.coords.latitude, lng: p.coords.longitude }),
-      () => { /* ignore */ },
-      { enableHighAccuracy: true, timeout: 5000 }
+      () => {},
+      { enableHighAccuracy: true, timeout: 5000 },
     );
   }, [open]);
 
@@ -220,14 +181,18 @@ function SosDialog() {
     mutationFn: async () => {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) throw new Error("Tidak ada sesi");
-      const { data: inserted, error } = await supabase.from("kejadian").insert({
-        tipe,
-        deskripsi: deskripsi || null,
-        alamat_text: alamat || null,
-        lokasi_lat: coords?.lat ?? null,
-        lokasi_lng: coords?.lng ?? null,
-        pelapor_id: u.user.id,
-      }).select("id").single();
+      const { data: inserted, error } = await supabase
+        .from("kejadian")
+        .insert({
+          tipe,
+          deskripsi: deskripsi || null,
+          alamat_text: alamat || null,
+          lokasi_lat: coords?.lat ?? null,
+          lokasi_lng: coords?.lng ?? null,
+          pelapor_id: u.user.id,
+        })
+        .select("id")
+        .single();
       if (error) throw error;
       try {
         await notify({
@@ -235,7 +200,7 @@ function SosDialog() {
             kejadianId: inserted.id,
             title: `🚨 ${tipe.toUpperCase()} — DRG`,
             body: `${alamat || "Lokasi tidak dijelaskan"} — ${deskripsi || "butuh bantuan"}`,
-            url: "/kejadian",
+            url: `/kejadian/${inserted.id}`,
           },
         });
       } catch (err) {
@@ -270,7 +235,9 @@ function SosDialog() {
           <div>
             <Label>Tipe</Label>
             <Select value={tipe} onValueChange={(v) => setTipe(v as typeof tipe)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="sos">SOS Umum</SelectItem>
                 <SelectItem value="laka">Kecelakaan</SelectItem>
@@ -289,9 +256,7 @@ function SosDialog() {
           </div>
           <div className="rounded-lg bg-muted/50 px-3 py-2 text-xs">
             {coords ? (
-              <span className="font-mono">
-                📍 {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)}
-              </span>
+              <span className="font-mono">📍 {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)}</span>
             ) : (
               <span className="text-muted-foreground">Mendeteksi lokasi… (izinkan GPS)</span>
             )}
@@ -300,7 +265,10 @@ function SosDialog() {
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
           <AlertDialogAction
-            onClick={(e) => { e.preventDefault(); mut.mutate(); }}
+            onClick={(e) => {
+              e.preventDefault();
+              mut.mutate();
+            }}
             className="bg-signal text-signal-foreground hover:bg-signal/90"
             disabled={mut.isPending}
           >

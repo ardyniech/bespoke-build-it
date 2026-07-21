@@ -16,7 +16,10 @@ export type Database = {
     Tables: {
       kas_transactions: {
         Row: {
+          approved_at: string | null
+          approved_by: string | null
           bukti_path: string | null
+          catatan_approver: string | null
           created_at: string
           created_by: string
           deskripsi: string | null
@@ -25,11 +28,15 @@ export type Database = {
           jumlah: number
           kategori: string
           ledger: Database["public"]["Enums"]["kas_ledger"]
+          status: Database["public"]["Enums"]["kas_status"]
           tanggal: string
           updated_at: string
         }
         Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
           bukti_path?: string | null
+          catatan_approver?: string | null
           created_at?: string
           created_by: string
           deskripsi?: string | null
@@ -38,11 +45,15 @@ export type Database = {
           jumlah: number
           kategori?: string
           ledger: Database["public"]["Enums"]["kas_ledger"]
+          status?: Database["public"]["Enums"]["kas_status"]
           tanggal?: string
           updated_at?: string
         }
         Update: {
+          approved_at?: string | null
+          approved_by?: string | null
           bukti_path?: string | null
+          catatan_approver?: string | null
           created_at?: string
           created_by?: string
           deskripsi?: string | null
@@ -51,6 +62,7 @@ export type Database = {
           jumlah?: number
           kategori?: string
           ledger?: Database["public"]["Enums"]["kas_ledger"]
+          status?: Database["public"]["Enums"]["kas_status"]
           tanggal?: string
           updated_at?: string
         }
@@ -201,6 +213,50 @@ export type Database = {
           wilayah?: string
         }
         Relationships: []
+      }
+      piket_swap_requests: {
+        Row: {
+          alasan: string | null
+          created_at: string
+          id: string
+          requested_by: string
+          responded_at: string | null
+          shift_id: string
+          status: string
+          target_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          alasan?: string | null
+          created_at?: string
+          id?: string
+          requested_by: string
+          responded_at?: string | null
+          shift_id: string
+          status?: string
+          target_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          alasan?: string | null
+          created_at?: string
+          id?: string
+          requested_by?: string
+          responded_at?: string | null
+          shift_id?: string
+          status?: string
+          target_user_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "piket_swap_requests_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "piket_shifts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -550,6 +606,7 @@ export type Database = {
       jenjang_anggota: "calon" | "muda" | "madya" | "purna"
       kas_jenis: "masuk" | "keluar"
       kas_ledger: "umum" | "sosial"
+      kas_status: "menunggu" | "disetujui" | "ditolak"
       kejadian_status: "open" | "on_progress" | "closed"
       kejadian_tipe: "sos" | "laka" | "mogok" | "lain"
       piket_shift_slot: "pagi" | "siang" | "malam"
@@ -690,6 +747,7 @@ export const Constants = {
       jenjang_anggota: ["calon", "muda", "madya", "purna"],
       kas_jenis: ["masuk", "keluar"],
       kas_ledger: ["umum", "sosial"],
+      kas_status: ["menunggu", "disetujui", "ditolak"],
       kejadian_status: ["open", "on_progress", "closed"],
       kejadian_tipe: ["sos", "laka", "mogok", "lain"],
       piket_shift_slot: ["pagi", "siang", "malam"],
