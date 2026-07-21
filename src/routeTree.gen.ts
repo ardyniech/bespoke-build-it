@@ -21,6 +21,7 @@ import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPetaRouteImport } from './routes/_authenticated/peta'
 import { Route as AuthenticatedNotulenRouteImport } from './routes/_authenticated/notulen'
 import { Route as AuthenticatedKejadianRouteImport } from './routes/_authenticated/kejadian'
+import { Route as AuthenticatedKasRouteImport } from './routes/_authenticated/kas'
 import { Route as AuthenticatedKaderisasiRouteImport } from './routes/_authenticated/kaderisasi'
 import { Route as AuthenticatedInventarisRouteImport } from './routes/_authenticated/inventaris'
 import { Route as AuthenticatedEtikRouteImport } from './routes/_authenticated/etik'
@@ -87,6 +88,11 @@ const AuthenticatedKejadianRoute = AuthenticatedKejadianRouteImport.update({
   path: '/kejadian',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedKasRoute = AuthenticatedKasRouteImport.update({
+  id: '/kas',
+  path: '/kas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedKaderisasiRoute = AuthenticatedKaderisasiRouteImport.update({
   id: '/kaderisasi',
   path: '/kaderisasi',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/etik': typeof AuthenticatedEtikRoute
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
+  '/kas': typeof AuthenticatedKasRoute
   '/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/etik': typeof AuthenticatedEtikRoute
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
+  '/kas': typeof AuthenticatedKasRoute
   '/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
@@ -168,6 +176,7 @@ export interface FileRoutesById {
   '/_authenticated/etik': typeof AuthenticatedEtikRoute
   '/_authenticated/inventaris': typeof AuthenticatedInventarisRoute
   '/_authenticated/kaderisasi': typeof AuthenticatedKaderisasiRoute
+  '/_authenticated/kas': typeof AuthenticatedKasRoute
   '/_authenticated/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
   '/_authenticated/peta': typeof AuthenticatedPetaRoute
@@ -189,6 +198,7 @@ export interface FileRouteTypes {
     | '/etik'
     | '/inventaris'
     | '/kaderisasi'
+    | '/kas'
     | '/kejadian'
     | '/notulen'
     | '/peta'
@@ -208,6 +218,7 @@ export interface FileRouteTypes {
     | '/etik'
     | '/inventaris'
     | '/kaderisasi'
+    | '/kas'
     | '/kejadian'
     | '/notulen'
     | '/peta'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/_authenticated/etik'
     | '/_authenticated/inventaris'
     | '/_authenticated/kaderisasi'
+    | '/_authenticated/kas'
     | '/_authenticated/kejadian'
     | '/_authenticated/notulen'
     | '/_authenticated/peta'
@@ -334,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedKejadianRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/kas': {
+      id: '/_authenticated/kas'
+      path: '/kas'
+      fullPath: '/kas'
+      preLoaderRoute: typeof AuthenticatedKasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/kaderisasi': {
       id: '/_authenticated/kaderisasi'
       path: '/kaderisasi'
@@ -398,6 +417,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEtikRoute: typeof AuthenticatedEtikRoute
   AuthenticatedInventarisRoute: typeof AuthenticatedInventarisRoute
   AuthenticatedKaderisasiRoute: typeof AuthenticatedKaderisasiRoute
+  AuthenticatedKasRoute: typeof AuthenticatedKasRoute
   AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRouteWithChildren
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
   AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
@@ -411,6 +431,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEtikRoute: AuthenticatedEtikRoute,
   AuthenticatedInventarisRoute: AuthenticatedInventarisRoute,
   AuthenticatedKaderisasiRoute: AuthenticatedKaderisasiRoute,
+  AuthenticatedKasRoute: AuthenticatedKasRoute,
   AuthenticatedKejadianRoute: AuthenticatedKejadianRouteWithChildren,
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
   AuthenticatedPetaRoute: AuthenticatedPetaRoute,
