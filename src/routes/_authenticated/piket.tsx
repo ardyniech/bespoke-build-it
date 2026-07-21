@@ -232,13 +232,14 @@ function SwapButton({ shiftId }: { shiftId: string }) {
 
   const submit = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.from("piket_swap_requests").insert({
+      const payload: Record<string, unknown> = {
         shift_id: shiftId,
         requested_by: user!.id,
-        target_user_id: target || undefined,
-        alasan: alasan || undefined,
         status: "menunggu",
-      });
+      };
+      if (target) payload.target_user_id = target;
+      if (alasan) payload.alasan = alasan;
+      const { error } = await supabase.from("piket_swap_requests").insert(payload as never);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -290,13 +291,11 @@ function NewShiftDialog({ defaultDate, onDone }: { defaultDate: string; onDone: 
   const mut = useMutation({
     mutationFn: async () => {
       const { data: u } = await supabase.auth.getUser();
-      const { error } = await supabase.from("piket_shifts").insert({
-        tanggal,
-        slot,
-        wilayah: wilayah || undefined,
-        user_id: userId || undefined,
-        created_by: u.user?.id ?? undefined,
-      });
+      const payload: Record<string, unknown> = { tanggal, slot };
+      if (wilayah) payload.wilayah = wilayah;
+      if (userId) payload.user_id = userId;
+      if (u.user?.id) payload.created_by = u.user.id;
+      const { error } = await supabase.from("piket_shifts").insert(payload as never);
       if (error) throw error;
     },
     onSuccess: () => {
