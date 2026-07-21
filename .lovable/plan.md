@@ -1,61 +1,62 @@
-# Fase 2 — Backend + 3 Modul Inti
+## Fokus turn ini
 
-Aktifkan Lovable Cloud lalu bangun Auth, Anggota, Kas, dan SOS/Kejadian secara berurutan agar setiap modul bisa diverifikasi sebelum lanjut.
+Cakupan besar (4 modul). Saya kerjakan berurutan dalam 1 turn — kalau ada modul yang butuh iterasi lebih dalam, kita lanjut di turn berikutnya.
 
-## Langkah 1 — Aktifkan Cloud & Auth Shell
-- Enable Lovable Cloud (Postgres + Auth + Storage).
-- Konfigurasi Auth: email/password + Google sign-in (default Lovable).
-- Buat route publik `/auth` (login + signup) dan `/reset-password`.
-- Pindahkan semua route aplikasi ke bawah `_authenticated/` (kecuali `/`, `/auth`, `/reset-password`, `/etik` noindex). Landing `/` jadi halaman publik dengan CTA "Masuk".
-- Header shell: tampilkan nama user + tombol logout ketika signed-in.
+### 0. Bug — Nama user di header/menu
 
-## Langkah 2 — Skema Database (satu migrasi)
-Semua tabel di `public` + GRANT + RLS + policies. Ringkas:
+`UserMenu` hanya baca `user_metadata.full_name/name` (Google OAuth), tapi signup email/password menyimpan `nama` di `profiles`. Fix: fetch `profiles.nama` sebagai sumber utama, fallback ke `user_metadata.nama` → `full_name` → prefix email. Sinkron ulang saat profil di-update (invalidate query `me-name`).
 
-- `profiles` (id → auth.users, nama, no_hp, alamat, foto_url, jenjang, status) — auto-insert via trigger `handle_new_user`.
-- `app_role` enum: `super_admin | admin | bendahara | satgas | anggota`.
-- `user_roles` (user_id, role) + fungsi `has_role(uuid, app_role)` SECURITY DEFINER.
-- `kas_ledger` enum: `umum | sosial`.
-- `kas_transactions` (ledger, jenis in/out, jumlah, kategori, deskripsi, bukti_url, created_by, tanggal).
-- `kejadian` (tipe: sos/laka/mogok/lain, pelapor_id, lokasi_lat, lokasi_lng, alamat_text, deskripsi, status: open/on_progress/closed, dibuat_at, ditutup_at).
-- `kejadian_responders` (kejadian_id, user_id, joined_at) — Satgas yang merespon.
-- Storage bucket privat `bukti-kas` + bucket `avatars` (publik).
+### 1. Peta live — Leaflet asli
 
-RLS singkat:
-- `profiles`: user baca/update dirinya; admin baca semua.
-- `user_roles`: user baca miliknya; hanya super_admin bisa insert/update/delete.
-- `kas_transactions`: semua anggota SELECT; hanya bendahara/admin INSERT/UPDATE/DELETE.
-- `kejadian`: semua anggota SELECT; pelapor & satgas UPDATE status; INSERT untuk authenticated.
-- `kejadian_responders`: satgas INSERT diri sendiri; semua anggota SELECT.
+- Install `leaflet` + `react-leaflet` + `@types/leaflet`.
+- Load CSS Leaflet via `<link>` di `__root.tsx` (jangan `@import` di `styles.css`).
+- Komponen `LiveMap.tsx` dynamic-import via `React.lazy` + `<ClientOnly>` supaya SSR/prerender aman.
+- OSM tile layer, marker berbeda untuk "Anda" (accent) vs rekan (primary) vs off (muted), popup: nama, waktu update, koordinat, tombol "Buka di Google Maps".
+- Auto-fit `bounds` ke semua marker On-Bit, tombol "Fokus ke saya".
+- Filter: tampilkan hanya On-Bit / semua (termasuk offline < 30 mnt).
 
-## Langkah 3 — Modul Anggota
-- Halaman `/anggota` daftar profil (search, filter jenjang/status, paginate).
-- Detail `/anggota/$id` (read-only kecuali admin).
-- Form edit profil sendiri di `/profil`.
-- Assign role (admin only) via dialog.
-- Server fn: `listAnggota`, `getAnggota`, `updateProfile`, `assignRole`.
+### 2. Kejadian/SOS — detail, join, tutup
 
-## Langkah 4 — Modul Kas & Keuangan
-- Halaman `/kas` dengan tab **Umum** / **Sosial**, kartu saldo real-time (SUM masuk − keluar).
-- Tabel transaksi + filter tanggal/kategori.
-- Dialog "Tambah Transaksi" (bendahara/admin): jenis, jumlah, kategori, deskripsi, upload bukti ke `bukti-kas`.
-- Signed URL untuk lihat bukti.
-- Server fn: `listTransaksi(ledger)`, `saldoKas(ledger)`, `createTransaksi`, `deleteTransaksi`.
+- Halaman detail `/_authenticated/kejadian/$id`: deskripsi, peta mini (reuse LiveMap 1 marker), daftar responder (join `kejadian_responders` + `profiles`), timeline dari `dibuat_at` / responder joined_at / ditutup_at.
+- Aksi kontekstual: "Saya respons" (idempoten), "Batal respons", "Tutup insiden" (hanya pelapor/admin/satgas), tombol "Rute Google Maps" & "Telepon pelapor" jika ada HP.
+- Realtime subscribe channel per id (kejadian + responders).
+- Fix `dibuat_at` field name check + tambah kolom `ditutup_at` jika belum ada (cek dulu via migration diff).
+- Kartu di list: link ke detail, badge jumlah responder.
 
-## Langkah 5 — Modul SOS & Kejadian
-- Tombol SOS di header: dialog konfirmasi → ambil geolocation → insert `kejadian` tipe `sos` status `open`.
-- Halaman `/kejadian`: list realtime (Supabase Realtime channel) + badge status.
-- Detail `/kejadian/$id`: peta lokasi (Leaflet lazy, `<ClientOnly>`), daftar responder, tombol "Saya Merespon" (insert `kejadian_responders`), tombol "Tutup Kejadian" (pelapor/admin).
-- Server fn: `createKejadian`, `listKejadian`, `respondKejadian`, `closeKejadian`.
-- Notifikasi in-app via `sonner` toast saat kejadian baru masuk (subscribe realtime di root layout untuk role satgas/admin).
+### 3. Kas — approval tiering + filter periode + export
 
-## Verifikasi tiap langkah
-Setelah tiap langkah: cek build, buat 1 user demo via signup, test happy path modul, baru lanjut.
+Migration: tambah kolom di `kas_transactions`:
+- `status` enum `kas_status`: `draft|menunggu|disetujui|ditolak` (default `disetujui` untuk backward-compat pada tier Hijau).
+- `approved_by uuid`, `approved_at timestamptz`, `catatan_approver text`.
 
-## Catatan teknis
-- Semua server fn pakai `createServerFn` + `requireSupabaseAuth`, admin check via `has_role`.
-- Storage bucket dibuat via tool, RLS via migrasi.
-- Route protected di bawah `_authenticated/` (managed layout), landing `/` tetap publik.
-- Peta pakai Leaflet + OSM (sudah disepakati, tanpa Google/Mapbox).
+Rule tier → butuh approval:
+- Hijau (<500rb) → auto `disetujui`.
+- Kuning (500rb–2jt) → butuh `bendahara`.
+- Oranye (2jt–5jt) → butuh `admin`.
+- Merah (≥5jt) → butuh `super_admin`.
 
-Approve untuk mulai Langkah 1?
+Trigger DB `trg_kas_default_status` untuk set status awal berdasarkan tier saat insert. Saldo dihitung hanya dari `status = 'disetujui'`.
+
+UI:
+- Filter: rentang tanggal (default bulan berjalan), ledger, status, kategori, search deskripsi.
+- Ringkasan periode: total masuk / keluar / net / saldo kumulatif; badge "menunggu approval" (dengan jumlah).
+- Tabel: kolom status, tombol Approve/Tolak untuk role sesuai.
+- Export CSV (BOM UTF-8) dari data terfilter.
+
+### 4. Piket — auto-assign, notifikasi shift, tukar jadwal
+
+Migration: tabel `piket_swap_requests` (`shift_id`, `requested_by`, `target_user_id`, `status: pending|accepted|declined|cancelled`, `alasan`), plus RLS (pemilik shift boleh request; target boleh accept/decline; admin lihat semua).
+
+Fitur:
+- Auto-assign: dialog "Buat jadwal 1 pekan" — pilih daftar Satgas + wilayah, algoritme round-robin isi slot kosong per hari (tiap orang max 1 shift/hari). Preview → confirm → batch insert.
+- Notifikasi push H-1: server fn `notifyPiketReminders` — dipicu manual dari tombol "Kirim pengingat besok" (skip pg_cron dulu; ringkas dulu). Kirim push ke owner shift H-1 yang punya `notif_pengumuman = true`.
+- Tukar jadwal: tombol "Ajukan tukar" pada shift milik user → pilih rekan target → request. Rekan target lihat inbox tukar di halaman piket (card di atas kalender). Accept → swap `user_id`. Decline → tandai.
+
+### Constraints & lingkup
+
+- Semua UI Bahasa Indonesia, ikut design system (warm terracotta, jangan hardcode warna).
+- Migration DB pakai tool migrasi (1 batch untuk kas + 1 untuk piket_swap + 1 kolom `ditutup_at` jika perlu).
+- Route baru: `/_authenticated/kejadian/$id`, plus komponen shared `LiveMap`.
+- Verifikasi build + typecheck di akhir; kalau ada modul yang terlalu berat dalam 1 turn, saya potong (Peta + Kejadian + bug user-menu wajib jalan; Kas & Piket kalau menyentuh limit akan saya push di turn berikut dengan status jelas).
+
+Approve untuk mulai eksekusi?
