@@ -34,7 +34,7 @@ export const Route = createFileRoute("/_authenticated/kas")({
 
 type Tx = {
   id: string;
-  ledger: "sosial" | "koperasi";
+  ledger: "sosial" | "umum";
   jenis: "masuk" | "keluar";
   jumlah: number;
   kategori: string | null;
@@ -57,7 +57,7 @@ function KasPage() {
   const isAdmin = useIs("admin");
   const canApprove = isBendahara || isAdmin;
 
-  const [ledgerFilter, setLedgerFilter] = useState<"all" | "sosial" | "koperasi">("all");
+  const [ledgerFilter, setLedgerFilter] = useState<"all" | "sosial" | "umum">("all");
   const [statusFilter, setStatusFilter] = useState<"all" | Tx["status"]>("all");
   const [q, setQ] = useState("");
 
@@ -101,7 +101,7 @@ function KasPage() {
   }, [rows, ledgerFilter, statusFilter, q]);
 
   const totals = useMemo(() => {
-    const acc = { sosial: 0, koperasi: 0, menunggu: 0 };
+    const acc = { sosial: 0, umum: 0, menunggu: 0 };
     rows.forEach((r) => {
       if (r.status === "menunggu") acc.menunggu += 1;
       if (r.status !== "disetujui") return;
@@ -157,7 +157,7 @@ function KasPage() {
     <PageShell
       eyebrow="Bendahara"
       title="Kas Komunitas"
-      description="Ledger sosial & koperasi transparan. Transaksi ≥ Rp 500.000 butuh persetujuan admin/bendahara."
+      description="Ledger sosial & umum transparan. Transaksi ≥ Rp 500.000 butuh persetujuan admin/bendahara."
       actions={
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="sm" onClick={exportCsv}>
@@ -169,7 +169,7 @@ function KasPage() {
     >
       <div className="mb-6 grid gap-3 sm:grid-cols-3">
         <BalanceCard label="Saldo Sosial" value={totals.sosial} tone="success" />
-        <BalanceCard label="Saldo Koperasi" value={totals.koperasi} tone="primary" />
+        <BalanceCard label="Saldo Koperasi" value={totals.umum} tone="primary" />
         <div className="rounded-2xl border border-warn/40 bg-warn/10 p-5 shadow-card">
           <div className="text-xs font-semibold uppercase tracking-wider text-warn-foreground/80">Menunggu approval</div>
           <div className="mt-2 text-3xl font-bold text-warn-foreground">{totals.menunggu}</div>
@@ -189,7 +189,7 @@ function KasPage() {
           <SelectContent>
             <SelectItem value="all">Semua ledger</SelectItem>
             <SelectItem value="sosial">Sosial</SelectItem>
-            <SelectItem value="koperasi">Koperasi</SelectItem>
+            <SelectItem value="umum">Koperasi</SelectItem>
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}>
@@ -360,7 +360,7 @@ function NewTxDialog() {
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="sosial">Sosial</SelectItem>
-                  <SelectItem value="koperasi">Koperasi</SelectItem>
+                  <SelectItem value="umum">Koperasi</SelectItem>
                 </SelectContent>
               </Select>
             </div>
