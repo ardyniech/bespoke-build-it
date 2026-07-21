@@ -26,6 +26,7 @@ import { Route as AuthenticatedInventarisRouteImport } from './routes/_authentic
 import { Route as AuthenticatedEtikRouteImport } from './routes/_authenticated/etik'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAnggotaRouteImport } from './routes/_authenticated/anggota'
+import { Route as AuthenticatedKejadianIdRouteImport } from './routes/_authenticated/kejadian.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -111,6 +112,11 @@ const AuthenticatedAnggotaRoute = AuthenticatedAnggotaRouteImport.update({
   path: '/anggota',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedKejadianIdRoute = AuthenticatedKejadianIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedKejadianRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,13 +128,14 @@ export interface FileRoutesByFullPath {
   '/etik': typeof AuthenticatedEtikRoute
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
-  '/kejadian': typeof AuthenticatedKejadianRoute
+  '/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
   '/verifikasi/$token': typeof VerifikasiTokenRoute
+  '/kejadian/$id': typeof AuthenticatedKejadianIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -140,13 +147,14 @@ export interface FileRoutesByTo {
   '/etik': typeof AuthenticatedEtikRoute
   '/inventaris': typeof AuthenticatedInventarisRoute
   '/kaderisasi': typeof AuthenticatedKaderisasiRoute
-  '/kejadian': typeof AuthenticatedKejadianRoute
+  '/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/notulen': typeof AuthenticatedNotulenRoute
   '/peta': typeof AuthenticatedPetaRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
   '/verifikasi/$token': typeof VerifikasiTokenRoute
+  '/kejadian/$id': typeof AuthenticatedKejadianIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -160,13 +168,14 @@ export interface FileRoutesById {
   '/_authenticated/etik': typeof AuthenticatedEtikRoute
   '/_authenticated/inventaris': typeof AuthenticatedInventarisRoute
   '/_authenticated/kaderisasi': typeof AuthenticatedKaderisasiRoute
-  '/_authenticated/kejadian': typeof AuthenticatedKejadianRoute
+  '/_authenticated/kejadian': typeof AuthenticatedKejadianRouteWithChildren
   '/_authenticated/notulen': typeof AuthenticatedNotulenRoute
   '/_authenticated/peta': typeof AuthenticatedPetaRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/screening': typeof AuthenticatedScreeningRoute
   '/status/$token': typeof StatusTokenRoute
   '/verifikasi/$token': typeof VerifikasiTokenRoute
+  '/_authenticated/kejadian/$id': typeof AuthenticatedKejadianIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/screening'
     | '/status/$token'
     | '/verifikasi/$token'
+    | '/kejadian/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/screening'
     | '/status/$token'
     | '/verifikasi/$token'
+    | '/kejadian/$id'
   id:
     | '__root__'
     | '/'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/_authenticated/screening'
     | '/status/$token'
     | '/verifikasi/$token'
+    | '/_authenticated/kejadian/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -357,8 +369,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAnggotaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/kejadian/$id': {
+      id: '/_authenticated/kejadian/$id'
+      path: '/$id'
+      fullPath: '/kejadian/$id'
+      preLoaderRoute: typeof AuthenticatedKejadianIdRouteImport
+      parentRoute: typeof AuthenticatedKejadianRoute
+    }
   }
 }
+
+interface AuthenticatedKejadianRouteChildren {
+  AuthenticatedKejadianIdRoute: typeof AuthenticatedKejadianIdRoute
+}
+
+const AuthenticatedKejadianRouteChildren: AuthenticatedKejadianRouteChildren = {
+  AuthenticatedKejadianIdRoute: AuthenticatedKejadianIdRoute,
+}
+
+const AuthenticatedKejadianRouteWithChildren =
+  AuthenticatedKejadianRoute._addFileChildren(
+    AuthenticatedKejadianRouteChildren,
+  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnggotaRoute: typeof AuthenticatedAnggotaRoute
@@ -366,7 +398,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEtikRoute: typeof AuthenticatedEtikRoute
   AuthenticatedInventarisRoute: typeof AuthenticatedInventarisRoute
   AuthenticatedKaderisasiRoute: typeof AuthenticatedKaderisasiRoute
-  AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRoute
+  AuthenticatedKejadianRoute: typeof AuthenticatedKejadianRouteWithChildren
   AuthenticatedNotulenRoute: typeof AuthenticatedNotulenRoute
   AuthenticatedPetaRoute: typeof AuthenticatedPetaRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
@@ -379,7 +411,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEtikRoute: AuthenticatedEtikRoute,
   AuthenticatedInventarisRoute: AuthenticatedInventarisRoute,
   AuthenticatedKaderisasiRoute: AuthenticatedKaderisasiRoute,
-  AuthenticatedKejadianRoute: AuthenticatedKejadianRoute,
+  AuthenticatedKejadianRoute: AuthenticatedKejadianRouteWithChildren,
   AuthenticatedNotulenRoute: AuthenticatedNotulenRoute,
   AuthenticatedPetaRoute: AuthenticatedPetaRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
