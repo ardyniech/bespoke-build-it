@@ -235,8 +235,8 @@ function SwapButton({ shiftId }: { shiftId: string }) {
       const { error } = await supabase.from("piket_swap_requests").insert({
         shift_id: shiftId,
         requested_by: user!.id,
-        target_user_id: target || null,
-        alasan: alasan || null,
+        target_user_id: target || undefined,
+        alasan: alasan || undefined,
         status: "menunggu",
       });
       if (error) throw error;
@@ -293,9 +293,9 @@ function NewShiftDialog({ defaultDate, onDone }: { defaultDate: string; onDone: 
       const { error } = await supabase.from("piket_shifts").insert({
         tanggal,
         slot,
-        wilayah: wilayah || null,
-        user_id: userId || null,
-        created_by: u.user?.id ?? null,
+        wilayah: wilayah || undefined,
+        user_id: userId || undefined,
+        created_by: u.user?.id ?? undefined,
       });
       if (error) throw error;
     },
