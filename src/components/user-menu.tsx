@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
@@ -13,21 +12,32 @@ import {
 import { LogOut, User as UserIcon, Settings } from "lucide-react";
 
 export function UserMenu() {
-  const [email, setEmail] = useState<string | null>(null);
-  const [name, setName] = useState<string | null>(null);
   const navigate = useNavigate();
   const qc = useQueryClient();
 
-  useEffect(() => {
-    let mounted = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      const u = data.user;
-      setEmail(u?.email ?? null);
-      setName((u?.user_metadata?.full_name as string) ?? (u?.user_metadata?.name as string) ?? null);
-    });
-    return () => { mounted = false; };
-  }, []);
+  const { data } = useQuery({
+    queryKey: ["me-identity"],
+    staleTime: 30_000,
+    queryFn: async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return { email: null as string | null, name: null as string | null };
+      const { data: p } = await supabase
+        .from("profiles")
+        .select("nama")
+        .eq("id", u.user.id)
+        .maybeSingle();
+      const meta = u.user.user_metadata ?? {};
+      const name =
+        (p?.nama as string | undefined) ??
+        (meta.nama as string | undefined) ??
+        (meta.full_name as string | undefined) ??
+        (meta.name as string | undefined) ??
+        (u.user.email ? u.user.email.split("@")[0] : null);
+      return { email: u.user.email ?? null, name: name ?? null };
+    },
+  });
+  const email = data?.email ?? null;
+  const name = data?.name ?? null;
 
   const initials = (name ?? email ?? "?")
     .split(/[\s@]/)
