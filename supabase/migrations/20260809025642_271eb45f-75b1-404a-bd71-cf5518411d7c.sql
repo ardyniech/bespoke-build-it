@@ -1,0 +1,1 @@
+DELETE FROM public.screening_applications WHERE email = 'tes.rpc@example.com';
