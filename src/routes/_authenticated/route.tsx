@@ -85,7 +85,7 @@ function AuthedLayout() {
             </div>
           </header>
           {onBit && error ? (
-            <div className="border-b border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-center text-[11px] text-amber-800 md:px-6">
+            <div className="border-b border-warn/40 bg-warn/15 px-3 py-1.5 text-center text-[11px] text-warn-foreground md:px-6">
               GPS tidak bisa diakses: {error}. Cek izin lokasi browser.
             </div>
           ) : null}
