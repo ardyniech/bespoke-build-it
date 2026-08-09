@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useMe } from "@/hooks/use-me";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,37 +15,10 @@ import { LogOut, User as UserIcon, Settings } from "lucide-react";
 export function UserMenu() {
   const navigate = useNavigate();
   const qc = useQueryClient();
-
-  const { data } = useQuery({
-    queryKey: ["me-identity"],
-    staleTime: 30_000,
-    queryFn: async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) return { email: null as string | null, name: null as string | null };
-      const { data: p } = await supabase
-        .from("profiles")
-        .select("nama")
-        .eq("id", u.user.id)
-        .maybeSingle();
-      const meta = u.user.user_metadata ?? {};
-      const name =
-        (p?.nama as string | undefined) ??
-        (meta.nama as string | undefined) ??
-        (meta.full_name as string | undefined) ??
-        (meta.name as string | undefined) ??
-        (u.user.email ? u.user.email.split("@")[0] : null);
-      return { email: u.user.email ?? null, name: name ?? null };
-    },
-  });
-  const email = data?.email ?? null;
-  const name = data?.name ?? null;
-
-  const initials = (name ?? email ?? "?")
-    .split(/[\s@]/)
-    .filter(Boolean)
-    .map((s) => s[0]!.toUpperCase())
-    .slice(0, 2)
-    .join("");
+  const { data: me } = useMe();
+  const email = me?.email ?? null;
+  const name = me?.name ?? null;
+  const initials = me?.initials ?? "";
 
   async function handleSignOut() {
     await qc.cancelQueries();
