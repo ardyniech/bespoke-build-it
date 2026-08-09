@@ -179,14 +179,19 @@ function SosDialog() {
 
   const mut = useMutation({
     mutationFn: async () => {
+      if (!coords && alamat.trim().length < 4) {
+        throw new Error(
+          "Lokasi GPS belum terdeteksi. Isi alamat/patokan minimal 4 karakter agar Satgas bisa menemukanmu.",
+        );
+      }
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) throw new Error("Tidak ada sesi");
       const { data: inserted, error } = await supabase
         .from("kejadian")
         .insert({
           tipe,
-          deskripsi: deskripsi || null,
-          alamat_text: alamat || null,
+          deskripsi: deskripsi.trim() || null,
+          alamat_text: alamat.trim() || null,
           lokasi_lat: coords?.lat ?? null,
           lokasi_lng: coords?.lng ?? null,
           pelapor_id: u.user.id,
@@ -258,7 +263,9 @@ function SosDialog() {
             {coords ? (
               <span className="font-mono">📍 {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)}</span>
             ) : (
-              <span className="text-muted-foreground">Mendeteksi lokasi… (izinkan GPS)</span>
+              <span className="text-warn-foreground">
+                Mendeteksi lokasi… (izinkan GPS). Kalau gagal, wajib isi alamat/patokan.
+              </span>
             )}
           </div>
         </div>
@@ -270,7 +277,7 @@ function SosDialog() {
               mut.mutate();
             }}
             className="bg-signal text-signal-foreground hover:bg-signal/90"
-            disabled={mut.isPending}
+            disabled={mut.isPending || (!coords && alamat.trim().length < 4)}
           >
             {mut.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Kirim SOS
           </AlertDialogAction>
