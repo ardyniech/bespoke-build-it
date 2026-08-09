@@ -288,9 +288,7 @@ function Dashboard() {
                       ? "bg-signal/15 text-signal"
                       : f.tone === "success"
                         ? "bg-success/15 text-success"
-                        : f.tone === "accent"
-                          ? "bg-accent/25 text-accent-foreground"
-                          : "bg-muted text-muted-foreground")
+                        : "bg-muted text-muted-foreground")
                   }
                 >
                   {f.tag}
