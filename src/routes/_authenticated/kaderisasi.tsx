@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/kaderisasi")({
 });
 
 function KaderisasiPage() {
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["kaderisasi-stats"],
     queryFn: async () => {
       const { data, error } = await supabase.from("profiles").select("jenjang");
@@ -58,7 +58,11 @@ function KaderisasiPage() {
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         {(["calon","muda","madya","purna"] as const).map((k) => (
           <div key={k} className="rounded-2xl border border-border bg-card p-4 text-center shadow-card">
-            <div className="font-display text-3xl font-bold">{stats?.[k] ?? 0}</div>
+            {statsLoading ? (
+              <div className="mx-auto h-8 w-10 animate-pulse rounded bg-muted" />
+            ) : (
+              <div className="font-display text-3xl font-bold">{stats?.[k] ?? 0}</div>
+            )}
             <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{k}</div>
           </div>
         ))}
