@@ -31,6 +31,22 @@ export const Route = createFileRoute("/_authenticated/piket")({
   component: PiketPage,
 });
 
+function useMemberOptions() {
+  return useQuery({
+    queryKey: ["member-options"],
+    staleTime: 60_000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, nama, status")
+        .eq("status", "aktif")
+        .order("nama");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
 type Shift = {
   id: string;
   tanggal: string;
@@ -230,6 +246,7 @@ function SwapButton({ shiftId }: { shiftId: string }) {
   const [open, setOpen] = useState(false);
   const [alasan, setAlasan] = useState("");
   const [target, setTarget] = useState("");
+  const { data: members = [] } = useMemberOptions();
 
   const submit = useMutation({
     mutationFn: async () => {
@@ -238,7 +255,7 @@ function SwapButton({ shiftId }: { shiftId: string }) {
         requested_by: user!.id,
         status: "menunggu",
       };
-      if (target) payload.target_user_id = target;
+      if (target && target !== "open") payload.target_user_id = target;
       if (alasan) payload.alasan = alasan;
       const { error } = await supabase.from("piket_swap_requests").insert(payload as never);
       if (error) throw error;
@@ -263,8 +280,22 @@ function SwapButton({ shiftId }: { shiftId: string }) {
         <DialogHeader><DialogTitle>Ajukan tukar shift</DialogTitle></DialogHeader>
         <div className="grid gap-3">
           <div>
-            <Label>ID rekan tujuan (opsional)</Label>
-            <Input value={target} onChange={(e) => setTarget(e.target.value)} placeholder="kosongkan untuk terbuka" />
+            <Label>Rekan tujuan</Label>
+            <Select value={target || "open"} onValueChange={setTarget}>
+              <SelectTrigger>
+                <SelectValue placeholder="Terbuka untuk siapa saja" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="open">Terbuka untuk siapa saja</SelectItem>
+                {members
+                  .filter((m) => m.id !== user?.id)
+                  .map((m) => (
+                    <SelectItem key={m.id} value={m.id}>
+                      {m.nama}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <Label>Alasan</Label>
@@ -288,13 +319,14 @@ function NewShiftDialog({ defaultDate, onDone }: { defaultDate: string; onDone: 
   const [slot, setSlot] = useState<Shift["slot"]>("pagi");
   const [wilayah, setWilayah] = useState("");
   const [userId, setUserId] = useState("");
+  const { data: members = [], isLoading: membersLoading } = useMemberOptions();
 
   const mut = useMutation({
     mutationFn: async () => {
       const { data: u } = await supabase.auth.getUser();
       const payload: Record<string, unknown> = { tanggal, slot };
       if (wilayah) payload.wilayah = wilayah;
-      if (userId) payload.user_id = userId;
+      if (userId && userId !== "none") payload.user_id = userId;
       if (u.user?.id) payload.created_by = u.user.id;
       const { error } = await supabase.from("piket_shifts").insert(payload as never);
       if (error) throw error;
@@ -335,11 +367,23 @@ function NewShiftDialog({ defaultDate, onDone }: { defaultDate: string; onDone: 
             <Input value={wilayah} onChange={(e) => setWilayah(e.target.value)} placeholder="Malang Kota / Barat / dsb" />
           </div>
           <div>
-            <Label>User ID petugas (opsional)</Label>
-            <Input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="uuid anggota" />
+            <Label>Petugas</Label>
+            <Select value={userId || "none"} onValueChange={setUserId}>
+              <SelectTrigger>
+                <SelectValue placeholder={membersLoading ? "Memuat anggota…" : "Belum ditentukan"} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Belum ditentukan</SelectItem>
+                {members.map((m) => (
+                  <SelectItem key={m.id} value={m.id}>
+                    {m.nama}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="rounded-lg bg-muted/60 px-3 py-2 text-[11px] text-muted-foreground">
-            Auto-assign lanjutan akan menyusul — untuk sekarang isi user ID manual.
+            Pilih anggota aktif dari daftar. Shift tanpa petugas akan tampil sebagai slot terbuka.
           </div>
         </div>
         <DialogFooter>

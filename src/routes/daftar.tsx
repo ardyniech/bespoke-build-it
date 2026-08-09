@@ -45,24 +45,22 @@ function DaftarPage() {
 
   const submit = useMutation({
     mutationFn: async () => {
-      const { data: app, error } = await supabase.from("screening_applications").insert({
-        nama: form.nama.trim(),
-        no_hp: form.no_hp.trim(),
-        email: form.email.trim(),
-        alamat: form.alamat.trim() || null,
-        kota: form.kota.trim() || null,
-        motivasi: form.motivasi.trim() || null,
-      }).select("id, verify_token").single();
-      if (error) throw error;
-
-      const rows = questions
+      const payloadAnswers = questions
         .filter((q) => answers[q.id])
-        .map((q) => ({ application_id: app.id, question_id: q.id, jawaban: answers[q.id] }));
-      if (rows.length) {
-        const { error: e2 } = await supabase.from("screening_answers").insert(rows);
-        if (e2) throw e2;
-      }
-      return app.verify_token as string;
+        .map((q) => ({ question_id: q.id, jawaban: answers[q.id] }));
+
+      const { data, error } = await supabase.rpc("submit_screening_application", {
+        _nama: form.nama.trim(),
+        _no_hp: form.no_hp.trim(),
+        _email: form.email.trim(),
+        _alamat: form.alamat.trim() || undefined,
+        _kota: form.kota.trim() || undefined,
+        _motivasi: form.motivasi.trim() || undefined,
+        _answers: payloadAnswers,
+      });
+      if (error) throw error;
+      if (!data) throw new Error("Token verifikasi tidak diterima.");
+      return data as string;
     },
     onSuccess: (token) => setDone({ token }),
     onError: (e: Error) => toast.error("Gagal mengirim", { description: e.message }),

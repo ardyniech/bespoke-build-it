@@ -25,6 +25,21 @@ import { usePush } from "@/hooks/use-push";
 import { PermissionOnboarding } from "@/components/permission-onboarding";
 
 export const Route = createFileRoute("/_authenticated/profil")({
+  head: () => ({
+    meta: [
+      { title: "Profil & Preferensi — DRG App" },
+      {
+        name: "description",
+        content:
+          "Kelola biodata anggota DRG, foto profil, izin GPS on-bit, dan preferensi notifikasi push.",
+      },
+      { property: "og:title", content: "Profil & Preferensi — DRG App" },
+      {
+        property: "og:description",
+        content: "Kelola biodata, izin lokasi, dan preferensi notifikasi akun DRG kamu.",
+      },
+    ],
+  }),
   component: ProfilPage,
 });
 

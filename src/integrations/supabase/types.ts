@@ -599,6 +599,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_kejadian_pelapor: {
+        Args: { _kejadian_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_kejadian_responder: {
+        Args: { _kejadian_id: string; _user_id: string }
+        Returns: boolean
+      }
       member_contacts: {
         Args: never
         Returns: {
@@ -607,6 +615,18 @@ export type Database = {
           id: string
           no_hp: string
         }[]
+      }
+      submit_screening_application: {
+        Args: {
+          _alamat?: string
+          _answers?: Json
+          _email: string
+          _kota?: string
+          _motivasi?: string
+          _nama: string
+          _no_hp: string
+        }
+        Returns: string
       }
       verify_application_email: { Args: { _token: string }; Returns: boolean }
     }

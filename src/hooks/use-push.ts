@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { VAPID_PUBLIC_KEY, urlBase64ToUint8Array } from "@/lib/vapid";
 
@@ -52,6 +53,9 @@ export function usePush() {
         { onConflict: "endpoint" },
       );
       setSubscribed(true);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Terjadi kesalahan tidak dikenal.";
+      toast.error("Gagal mengaktifkan notifikasi", { description: message });
     } finally {
       setBusy(false);
     }
@@ -67,6 +71,9 @@ export function usePush() {
         await sub.unsubscribe();
       }
       setSubscribed(false);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Terjadi kesalahan tidak dikenal.";
+      toast.error("Gagal menonaktifkan notifikasi", { description: message });
     } finally {
       setBusy(false);
     }

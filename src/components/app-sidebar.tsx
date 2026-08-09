@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useMe } from "@/hooks/use-me";
 import {
   LayoutDashboard,
   Users,
@@ -50,6 +51,8 @@ const kaderisasi = [
 export function AppSidebar() {
   const { state, isMobile, setOpenMobile } = useSidebar();
   const collapsed = state === "collapsed";
+  const { data: me } = useMe();
+  const initials = me?.initials || "?";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const isActive = (url: string) =>
     url === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(url);
@@ -114,20 +117,20 @@ export function AppSidebar() {
         {!collapsed ? (
           <div className="flex items-center gap-3">
             <div className="grid h-9 w-9 place-items-center rounded-full bg-sidebar-accent font-display text-sm font-bold text-sidebar-accent-foreground">
-              BP
+              {initials}
             </div>
             <div className="flex min-w-0 flex-col leading-tight">
               <span className="truncate text-sm font-medium text-sidebar-foreground">
-                Bang Parjo
+                {me?.name ?? "Anggota DRG"}
               </span>
               <span className="truncate text-xs text-sidebar-foreground/60">
-                Super Admin
+                {me?.roleLabel ?? "Anggota"}
               </span>
             </div>
           </div>
         ) : (
           <div className="mx-auto grid h-9 w-9 place-items-center rounded-full bg-sidebar-accent font-display text-sm font-bold text-sidebar-accent-foreground">
-            BP
+            {initials}
           </div>
         )}
       </SidebarFooter>
