@@ -131,7 +131,8 @@ function PiketPage() {
       if (error) throw error;
       if (accept) {
         // pindahkan user_id shift dari pemilik lama ke penerima
-        await supabase.from("piket_shifts").update({ user_id: requestedBy === user!.id ? null : user!.id }).eq("id", shiftId);
+        void requestedBy;
+        await supabase.from("piket_shifts").update({ user_id: user!.id }).eq("id", shiftId);
       }
     },
     onSuccess: () => toast.success("Permintaan diperbarui"),
