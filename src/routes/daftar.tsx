@@ -53,9 +53,9 @@ function DaftarPage() {
         _nama: form.nama.trim(),
         _no_hp: form.no_hp.trim(),
         _email: form.email.trim(),
-        _alamat: form.alamat.trim() || null,
-        _kota: form.kota.trim() || null,
-        _motivasi: form.motivasi.trim() || null,
+        _alamat: form.alamat.trim() || undefined,
+        _kota: form.kota.trim() || undefined,
+        _motivasi: form.motivasi.trim() || undefined,
         _answers: payloadAnswers,
       });
       if (error) throw error;
