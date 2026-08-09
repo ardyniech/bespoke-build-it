@@ -62,7 +62,7 @@ function GpsCard({ userId }: Props) {
           </ol>
         )}
         {error && !denied ? (
-          <div className="rounded-md bg-amber-500/10 px-2 py-1.5 text-xs text-amber-800">{error}</div>
+          <div className="rounded-md bg-warn/15 px-2 py-1.5 text-xs text-warn-foreground">{error}</div>
         ) : null}
         {coords ? (
           <div className="flex items-center gap-2 text-xs text-success">
