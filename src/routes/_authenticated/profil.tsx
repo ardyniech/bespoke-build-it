@@ -62,11 +62,21 @@ function ProfilPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select(
+          "id, nama, foto_url, jenjang, status, bio, created_at, updated_at, notif_sos, notif_kas, notif_pengumuman, notif_email",
+        )
         .eq("id", userId!)
         .maybeSingle();
       if (error) throw error;
-      return data as ProfileRow | null;
+      if (!data) return null;
+      const { data: contacts } = await supabase.rpc("member_contacts");
+      const mine = (contacts ?? []).find((c) => c.id === userId);
+      return {
+        ...data,
+        no_hp: mine?.no_hp ?? null,
+        alamat: mine?.alamat ?? null,
+        email: mine?.email ?? null,
+      } as ProfileRow;
     },
   });
 

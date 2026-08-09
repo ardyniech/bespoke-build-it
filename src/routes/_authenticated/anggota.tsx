@@ -27,10 +27,16 @@ function AnggotaPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, nama, no_hp, alamat, jenjang, status")
+        .select("id, nama, jenjang, status")
         .order("nama");
       if (error) throw error;
-      return data;
+      const { data: contacts } = await supabase.rpc("member_contacts");
+      const map = new Map((contacts ?? []).map((c) => [c.id, c]));
+      return (data ?? []).map((p) => ({
+        ...p,
+        no_hp: map.get(p.id)?.no_hp ?? null,
+        alamat: map.get(p.id)?.alamat ?? null,
+      }));
     },
   });
 
