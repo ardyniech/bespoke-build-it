@@ -52,6 +52,9 @@ export function usePush() {
         { onConflict: "endpoint" },
       );
       setSubscribed(true);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Terjadi kesalahan tidak dikenal.";
+      toast.error("Gagal mengaktifkan notifikasi", { description: message });
     } finally {
       setBusy(false);
     }
