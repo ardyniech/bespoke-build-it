@@ -554,6 +554,33 @@ export type Database = {
       }
     }
     Views: {
+      member_directory: {
+        Row: {
+          bio: string | null
+          foto_url: string | null
+          id: string | null
+          jenjang: Database["public"]["Enums"]["jenjang_anggota"] | null
+          nama: string | null
+          status: Database["public"]["Enums"]["status_anggota"] | null
+        }
+        Insert: {
+          bio?: string | null
+          foto_url?: string | null
+          id?: string | null
+          jenjang?: Database["public"]["Enums"]["jenjang_anggota"] | null
+          nama?: string | null
+          status?: Database["public"]["Enums"]["status_anggota"] | null
+        }
+        Update: {
+          bio?: string | null
+          foto_url?: string | null
+          id?: string | null
+          jenjang?: Database["public"]["Enums"]["jenjang_anggota"] | null
+          nama?: string | null
+          status?: Database["public"]["Enums"]["status_anggota"] | null
+        }
+        Relationships: []
+      }
       screening_questions_public: {
         Row: {
           id: string | null
