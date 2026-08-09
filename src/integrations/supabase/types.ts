@@ -599,6 +599,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      member_contacts: {
+        Args: never
+        Returns: {
+          alamat: string
+          email: string
+          id: string
+          no_hp: string
+        }[]
+      }
       verify_application_email: { Args: { _token: string }; Returns: boolean }
     }
     Enums: {

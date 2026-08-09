@@ -51,8 +51,12 @@ function KejadianDetail() {
       if (error) throw error;
       const ids = (data ?? []).map((r) => r.user_id);
       if (!ids.length) return [];
-      const { data: profs } = await supabase.from("profiles").select("id, nama, no_hp").in("id", ids);
-      const map = new Map((profs ?? []).map((p) => [p.id, p]));
+      const { data: profs } = await supabase.from("profiles").select("id, nama").in("id", ids);
+      const { data: contacts } = await supabase.rpc("member_contacts");
+      const cmap = new Map((contacts ?? []).map((c) => [c.id, c.no_hp]));
+      const map = new Map(
+        (profs ?? []).map((p) => [p.id, { ...p, no_hp: cmap.get(p.id) ?? null }]),
+      );
       return (data ?? []).map((r) => ({ ...r, profile: map.get(r.user_id) }));
     },
   });
@@ -61,8 +65,11 @@ function KejadianDetail() {
     queryKey: ["pelapor", k?.pelapor_id],
     enabled: !!k?.pelapor_id,
     queryFn: async () => {
-      const { data } = await supabase.from("profiles").select("nama, no_hp").eq("id", k!.pelapor_id).maybeSingle();
-      return data;
+      const { data } = await supabase.from("profiles").select("nama").eq("id", k!.pelapor_id).maybeSingle();
+      if (!data) return null;
+      const { data: contacts } = await supabase.rpc("member_contacts");
+      const no_hp = (contacts ?? []).find((c) => c.id === k!.pelapor_id)?.no_hp ?? null;
+      return { ...data, no_hp };
     },
   });
 

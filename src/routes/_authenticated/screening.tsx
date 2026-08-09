@@ -42,7 +42,10 @@ function ScreeningPage() {
     queryKey: ["screening-apps"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("screening_applications").select("*")
+        .from("screening_applications")
+        .select(
+          "id, nama, no_hp, email, alamat, kota, motivasi, status, skor_total, catatan_pic, created_at, email_verified",
+        )
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as App[];
