@@ -26,6 +26,16 @@ import {
 import { Check, Download, Loader2, Plus, TrendingDown, TrendingUp, X } from "lucide-react";
 import { toast } from "sonner";
 import { useIs } from "@/hooks/use-my-role";
+import { useMe } from "@/hooks/use-me";
+
+type Tier = { label: string; role: "bendahara" | "admin" | "super_admin"; tone: string };
+
+function tierOf(jumlah: number): Tier | null {
+  if (jumlah < 500000) return null;
+  if (jumlah < 2000000) return { label: "Kuning · bendahara", role: "bendahara", tone: "bg-warn text-warn-foreground" };
+  if (jumlah < 5000000) return { label: "Oranye · admin", role: "admin", tone: "bg-signal/20 text-signal" };
+  return { label: "Merah · super admin", role: "super_admin", tone: "bg-destructive/20 text-destructive" };
+}
 
 export const Route = createFileRoute("/_authenticated/kas")({
   head: () => ({ meta: [{ title: "Kas Komunitas — DRG App" }] }),
@@ -56,6 +66,16 @@ function KasPage() {
   const isBendahara = useIs("bendahara");
   const isAdmin = useIs("admin");
   const canApprove = isBendahara || isAdmin;
+  const { data: me } = useMe();
+  const roles = me?.roles ?? [];
+  const canApproveTier = (jumlah: number) => {
+    const t = tierOf(jumlah);
+    if (!t) return false;
+    if (roles.includes("super_admin")) return true;
+    if (t.role === "super_admin") return false;
+    if (t.role === "admin") return roles.includes("admin");
+    return roles.includes("bendahara") || roles.includes("admin");
+  };
 
   const [ledgerFilter, setLedgerFilter] = useState<"all" | "sosial" | "umum">("all");
   const [statusFilter, setStatusFilter] = useState<"all" | Tx["status"]>("all");
@@ -75,12 +95,22 @@ function KasPage() {
     },
   });
 
+  const { data: balances = [] } = useQuery({
+    queryKey: ["kas-balances"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("kas_balances");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   useEffect(() => {
     const ch = supabase
       .channel("kas-rt")
-      .on("postgres_changes", { event: "*", schema: "public", table: "kas_transactions" }, () =>
-        qc.invalidateQueries({ queryKey: ["kas-tx"] }),
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "kas_transactions" }, () => {
+        qc.invalidateQueries({ queryKey: ["kas-tx"] });
+        qc.invalidateQueries({ queryKey: ["kas-balances"] });
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
@@ -100,16 +130,15 @@ function KasPage() {
     });
   }, [rows, ledgerFilter, statusFilter, q]);
 
+  // Saldo dihitung agregat di database (SUM), bukan dari data ter-limit di client.
   const totals = useMemo(() => {
     const acc = { sosial: 0, umum: 0, menunggu: 0 };
-    rows.forEach((r) => {
-      if (r.status === "menunggu") acc.menunggu += 1;
-      if (r.status !== "disetujui") return;
-      const delta = r.jenis === "masuk" ? Number(r.jumlah) : -Number(r.jumlah);
-      acc[r.ledger] += delta;
+    balances.forEach((b) => {
+      acc[b.ledger as "sosial" | "umum"] = Number(b.saldo ?? 0);
+      acc.menunggu += Number(b.menunggu ?? 0);
     });
     return acc;
-  }, [rows]);
+  }, [balances]);
 
   const approve = useMutation({
     mutationFn: async ({ id, status, note }: { id: string; status: "disetujui" | "ditolak"; note?: string }) => {
@@ -125,7 +154,10 @@ function KasPage() {
         .eq("id", id);
       if (error) throw error;
     },
-    onSuccess: (_d, v) => toast.success(v.status === "disetujui" ? "Disetujui" : "Ditolak"),
+    onSuccess: (_d, v) => {
+      toast.success(v.status === "disetujui" ? "Disetujui" : "Ditolak");
+      qc.invalidateQueries({ queryKey: ["kas-balances"] });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -157,7 +189,7 @@ function KasPage() {
     <PageShell
       eyebrow="Bendahara"
       title="Kas Komunitas"
-      description="Ledger sosial & umum transparan. Transaksi ≥ Rp 500.000 butuh persetujuan admin/bendahara."
+      description="Ledger sosial & umum transparan. Tier approval: <500rb otomatis, 500rb–2jt bendahara, 2–5jt admin, ≥5jt super admin."
       actions={
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="sm" onClick={exportCsv}>
@@ -234,6 +266,11 @@ function KasPage() {
                   <td className="px-4 py-3">
                     <div className="font-semibold">{r.kategori ?? "—"}</div>
                     {r.deskripsi && <div className="text-xs text-muted-foreground">{r.deskripsi}</div>}
+                    {tierOf(Number(r.jumlah)) && (
+                      <Badge variant="outline" className="mt-1 text-[10px]">
+                        {tierOf(Number(r.jumlah))!.label}
+                      </Badge>
+                    )}
                   </td>
                   <td className={"px-4 py-3 text-right font-mono font-semibold " + (r.jenis === "masuk" ? "text-success" : "text-signal")}>
                     <span className="inline-flex items-center gap-1">
@@ -257,14 +294,20 @@ function KasPage() {
                   {canApprove && (
                     <td className="px-4 py-3 text-right">
                       {r.status === "menunggu" ? (
-                        <div className="inline-flex gap-1">
-                          <Button size="sm" variant="outline" onClick={() => approve.mutate({ id: r.id, status: "disetujui" })}>
-                            <Check className="h-3.5 w-3.5" />
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => approve.mutate({ id: r.id, status: "ditolak" })}>
-                            <X className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
+                        canApproveTier(Number(r.jumlah)) ? (
+                          <div className="inline-flex gap-1">
+                            <Button size="sm" variant="outline" onClick={() => approve.mutate({ id: r.id, status: "disetujui" })}>
+                              <Check className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => approve.mutate({ id: r.id, status: "ditolak" })}>
+                              <X className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <span className="text-[11px] text-muted-foreground">
+                            Butuh {tierOf(Number(r.jumlah))?.role.replace("_", " ")}
+                          </span>
+                        )
                       ) : (
                         <span className="text-[11px] text-muted-foreground">
                           {r.approved_at ? new Date(r.approved_at).toLocaleDateString("id-ID") : "—"}
