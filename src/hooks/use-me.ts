@@ -19,6 +19,8 @@ export type Me = {
   roles: AppRole[];
   roleLabel: string;
   initials: string;
+  status: "aktif" | "nonaktif" | "cuti" | "pending_review" | null;
+  isPendingReview: boolean;
 };
 
 export function useMe() {
@@ -27,11 +29,20 @@ export function useMe() {
     staleTime: 30_000,
     queryFn: async () => {
       const { data: u } = await supabase.auth.getUser();
-      const empty: Me = { id: null, email: null, name: null, roles: [], roleLabel: "Anggota", initials: "" };
+      const empty: Me = {
+        id: null,
+        email: null,
+        name: null,
+        roles: [],
+        roleLabel: "Anggota",
+        initials: "",
+        status: null,
+        isPendingReview: false,
+      };
       if (!u.user) return empty;
 
       const [{ data: p }, { data: r }] = await Promise.all([
-        supabase.from("profiles").select("nama").eq("id", u.user.id).maybeSingle(),
+        supabase.from("profiles").select("nama, status").eq("id", u.user.id).maybeSingle(),
         supabase.from("user_roles").select("role").eq("user_id", u.user.id),
       ]);
 
@@ -60,6 +71,8 @@ export function useMe() {
         roles,
         roleLabel: top ? ROLE_LABEL[top] : "Anggota",
         initials,
+        status: (p?.status ?? null) as Me["status"],
+        isPendingReview: p?.status === "pending_review",
       };
     },
   });
