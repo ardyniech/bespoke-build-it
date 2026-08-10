@@ -644,7 +644,7 @@ export type Database = {
         | "wawancara"
         | "direkomendasikan"
         | "ditolak"
-      status_anggota: "aktif" | "nonaktif" | "cuti"
+      status_anggota: "aktif" | "nonaktif" | "cuti" | "pending_review"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -786,7 +786,7 @@ export const Constants = {
         "direkomendasikan",
         "ditolak",
       ],
-      status_anggota: ["aktif", "nonaktif", "cuti"],
+      status_anggota: ["aktif", "nonaktif", "cuti", "pending_review"],
     },
   },
 } as const
