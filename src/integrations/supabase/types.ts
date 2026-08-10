@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      kas_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          jumlah: number | null
+          new_data: Json | null
+          old_data: Json | null
+          transaction_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          jumlah?: number | null
+          new_data?: Json | null
+          old_data?: Json | null
+          transaction_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          jumlah?: number | null
+          new_data?: Json | null
+          old_data?: Json | null
+          transaction_id?: string | null
+        }
+        Relationships: []
+      }
       kas_transactions: {
         Row: {
           approved_at: string | null
@@ -580,6 +613,10 @@ export type Database = {
       }
     }
     Functions: {
+      can_approve_kas: {
+        Args: { _jumlah: number; _user_id: string }
+        Returns: boolean
+      }
       get_application_status: {
         Args: { _token: string }
         Returns: {
@@ -599,6 +636,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_active_member: { Args: { _user_id: string }; Returns: boolean }
       is_kejadian_pelapor: {
         Args: { _kejadian_id: string; _user_id: string }
         Returns: boolean
@@ -606,6 +644,21 @@ export type Database = {
       is_kejadian_responder: {
         Args: { _kejadian_id: string; _user_id: string }
         Returns: boolean
+      }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
+      kas_balances: {
+        Args: never
+        Returns: {
+          keluar: number
+          ledger: Database["public"]["Enums"]["kas_ledger"]
+          masuk: number
+          menunggu: number
+          saldo: number
+        }[]
+      }
+      kas_min_role: {
+        Args: { _jumlah: number }
+        Returns: Database["public"]["Enums"]["app_role"]
       }
       member_contacts: {
         Args: never
