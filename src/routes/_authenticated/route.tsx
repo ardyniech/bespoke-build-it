@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Siren, Radio, RadioTower } from "lucide-react";
 import { useLiveLocation } from "@/hooks/use-live-location";
 import { toast } from "sonner";
+import { useMe } from "@/hooks/use-me";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthedLayout() {
   const { user } = Route.useRouteContext();
   const { onBit, setOnBit, error, hydrated } = useLiveLocation(user?.id);
+  const { data: me } = useMe();
   const today = new Intl.DateTimeFormat("id-ID", {
     weekday: "long",
     day: "numeric",
@@ -84,6 +86,12 @@ function AuthedLayout() {
               <UserMenu />
             </div>
           </header>
+          {me?.isPendingReview ? (
+            <div className="border-b border-warn/40 bg-warn/15 px-3 py-2 text-center text-xs text-warn-foreground md:px-6">
+              Akun kamu <b>menunggu persetujuan admin</b>. Sementara ini kamu hanya bisa melihat profil sendiri —
+              peta live, direktori anggota, kas, dan kejadian anggota lain terkunci sampai disetujui.
+            </div>
+          ) : null}
           {onBit && error ? (
             <div className="border-b border-warn/40 bg-warn/15 px-3 py-1.5 text-center text-[11px] text-warn-foreground md:px-6">
               GPS tidak bisa diakses: {error}. Cek izin lokasi browser.
