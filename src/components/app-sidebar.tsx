@@ -12,6 +12,7 @@ import {
   Boxes,
   GraduationCap,
   ShieldAlert,
+  UserCheck,
 } from "lucide-react";
 
 import {
@@ -35,7 +36,7 @@ const operasional = [
   { title: "Piket Satgas", url: "/piket", icon: CalendarClock },
 ];
 
-const administrasi = [
+const administrasiBase = [
   { title: "Data Anggota", url: "/anggota", icon: Users },
   { title: "Kas & Keuangan", url: "/kas", icon: Wallet },
   { title: "Notulen Rapat", url: "/notulen", icon: FileText },
@@ -53,6 +54,10 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const { data: me } = useMe();
   const initials = me?.initials || "?";
+  const isAdmin = !!me?.roles.some((r) => r === "admin" || r === "super_admin");
+  const administrasi = isAdmin
+    ? [...administrasiBase, { title: "Persetujuan Akun", url: "/persetujuan", icon: UserCheck }]
+    : administrasiBase;
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const isActive = (url: string) =>
     url === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(url);

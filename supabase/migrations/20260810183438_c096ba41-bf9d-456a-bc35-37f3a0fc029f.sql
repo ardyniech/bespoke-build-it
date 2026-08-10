@@ -1,0 +1,1 @@
+ALTER TYPE public.status_anggota ADD VALUE IF NOT EXISTS 'pending_review';
