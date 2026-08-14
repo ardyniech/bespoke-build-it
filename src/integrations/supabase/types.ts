@@ -14,6 +14,95 @@ export type Database = {
   }
   public: {
     Tables: {
+      inventaris_barang: {
+        Row: {
+          catatan: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          jumlah: number
+          kondisi: string
+          lokasi_simpan: string
+          nama: string
+          updated_at: string
+        }
+        Insert: {
+          catatan?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          jumlah?: number
+          kondisi?: string
+          lokasi_simpan?: string
+          nama: string
+          updated_at?: string
+        }
+        Update: {
+          catatan?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          jumlah?: number
+          kondisi?: string
+          lokasi_simpan?: string
+          nama?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventaris_barang_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventaris_mutasi: {
+        Row: {
+          actor_id: string | null
+          barang_id: string
+          created_at: string
+          id: string
+          jenis: string
+          jumlah_perubahan: number
+          keterangan: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          barang_id: string
+          created_at?: string
+          id?: string
+          jenis: string
+          jumlah_perubahan: number
+          keterangan?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          barang_id?: string
+          created_at?: string
+          id?: string
+          jenis?: string
+          jumlah_perubahan?: number
+          keterangan?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventaris_mutasi_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventaris_mutasi_barang_id_fkey"
+            columns: ["barang_id"]
+            isOneToOne: false
+            referencedRelation: "inventaris_barang"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       kas_audit_log: {
         Row: {
           action: string
