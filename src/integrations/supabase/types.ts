@@ -211,6 +211,53 @@ export type Database = {
         }
         Relationships: []
       }
+      notulen: {
+        Row: {
+          catatan_tambahan: string | null
+          created_at: string
+          created_by: string
+          id: string
+          jenis_rapat: string
+          notulis: string
+          pemimpin_rapat: string
+          poin_poin: Json
+          tanggal: string
+          updated_at: string
+        }
+        Insert: {
+          catatan_tambahan?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          jenis_rapat: string
+          notulis: string
+          pemimpin_rapat: string
+          poin_poin?: Json
+          tanggal?: string
+          updated_at?: string
+        }
+        Update: {
+          catatan_tambahan?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          jenis_rapat?: string
+          notulis?: string
+          pemimpin_rapat?: string
+          poin_poin?: Json
+          tanggal?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notulen_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       piket_shifts: {
         Row: {
           catatan: string | null
