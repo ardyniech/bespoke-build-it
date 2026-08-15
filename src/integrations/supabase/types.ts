@@ -820,7 +820,13 @@ export type Database = {
       verify_application_email: { Args: { _token: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "super_admin" | "admin" | "bendahara" | "satgas" | "anggota"
+      app_role:
+        | "super_admin"
+        | "admin"
+        | "bendahara"
+        | "satgas"
+        | "anggota"
+        | "dewan_etik"
       jenjang_anggota: "calon" | "muda" | "madya" | "purna"
       kas_jenis: "masuk" | "keluar"
       kas_ledger: "umum" | "sosial"
@@ -961,7 +967,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["super_admin", "admin", "bendahara", "satgas", "anggota"],
+      app_role: [
+        "super_admin",
+        "admin",
+        "bendahara",
+        "satgas",
+        "anggota",
+        "dewan_etik",
+      ],
       jenjang_anggota: ["calon", "muda", "madya", "purna"],
       kas_jenis: ["masuk", "keluar"],
       kas_ledger: ["umum", "sosial"],
