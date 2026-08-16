@@ -8,9 +8,17 @@ const ROLE_LABEL: Record<AppRole, string> = {
   bendahara: "Bendahara",
   satgas: "Satgas",
   anggota: "Anggota",
+  dewan_etik: "Dewan Etik",
 };
 
-const ROLE_ORDER: AppRole[] = ["super_admin", "admin", "bendahara", "satgas", "anggota"];
+const ROLE_ORDER: AppRole[] = [
+  "super_admin",
+  "admin",
+  "dewan_etik",
+  "bendahara",
+  "satgas",
+  "anggota",
+];
 
 export type Me = {
   id: string | null;

@@ -261,6 +261,63 @@ export type Database = {
           },
         ]
       }
+      laporan_etik: {
+        Row: {
+          access_token: string
+          anonim: boolean
+          catatan_penanganan: string | null
+          created_at: string
+          handled_by: string | null
+          id: string
+          isi_laporan: string
+          pelapor_id: string | null
+          status: string
+          terlapor_nama: string
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string
+          anonim?: boolean
+          catatan_penanganan?: string | null
+          created_at?: string
+          handled_by?: string | null
+          id?: string
+          isi_laporan: string
+          pelapor_id?: string | null
+          status?: string
+          terlapor_nama: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          anonim?: boolean
+          catatan_penanganan?: string | null
+          created_at?: string
+          handled_by?: string | null
+          id?: string
+          isi_laporan?: string
+          pelapor_id?: string | null
+          status?: string
+          terlapor_nama?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "laporan_etik_handled_by_fkey"
+            columns: ["handled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "laporan_etik_pelapor_id_fkey"
+            columns: ["pelapor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       live_locations: {
         Row: {
           accuracy: number | null
@@ -753,6 +810,15 @@ export type Database = {
         Args: { _jumlah: number; _user_id: string }
         Returns: boolean
       }
+      cek_status_laporan_etik: {
+        Args: { _token: string }
+        Returns: {
+          catatan_penanganan: string
+          created_at: string
+          status: string
+          updated_at: string
+        }[]
+      }
       get_application_status: {
         Args: { _token: string }
         Returns: {
@@ -773,6 +839,7 @@ export type Database = {
         Returns: boolean
       }
       is_active_member: { Args: { _user_id: string }; Returns: boolean }
+      is_dewan_etik: { Args: { _user_id: string }; Returns: boolean }
       is_kejadian_pelapor: {
         Args: { _kejadian_id: string; _user_id: string }
         Returns: boolean
