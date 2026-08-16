@@ -8,6 +8,7 @@ const ROLE_LABEL: Record<AppRole, string> = {
   bendahara: "Bendahara",
   satgas: "Satgas",
   anggota: "Anggota",
+  dewan_etik: "Dewan Etik",
 };
 
 const ROLE_ORDER: AppRole[] = [
