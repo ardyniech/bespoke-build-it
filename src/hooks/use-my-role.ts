@@ -1,7 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-export type AppRole = "super_admin" | "admin" | "bendahara" | "satgas" | "anggota";
+export type AppRole =
+  | "super_admin"
+  | "admin"
+  | "bendahara"
+  | "satgas"
+  | "anggota"
+  | "dewan_etik";
 
 export function useMyRoles() {
   return useQuery({
