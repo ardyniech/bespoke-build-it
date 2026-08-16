@@ -138,25 +138,25 @@ function EtikPage() {
       if (!me?.id) throw new Error("Sesi tidak ditemukan");
       if (terlapor.trim().length < 3) throw new Error("Nama pihak terlapor wajib diisi");
       if (isi.trim().length < 20) throw new Error("Isi laporan minimal 20 karakter");
-      const { data, error } = await supabase
-        .from("laporan_etik")
-        .insert({
-          anonim,
-          pelapor_id: anonim ? null : me.id,
-          terlapor_nama: terlapor.trim(),
-          isi_laporan: isi.trim(),
-        })
-        .select("access_token, anonim")
-        .single();
+      // Token dibuat di klien: baris anonim tidak bisa dibaca balik oleh pelapor (RLS),
+      // jadi tidak bisa mengandalkan RETURNING.
+      const accessToken = crypto.randomUUID();
+      const { error } = await supabase.from("laporan_etik").insert({
+        anonim,
+        pelapor_id: anonim ? null : me.id,
+        terlapor_nama: terlapor.trim(),
+        isi_laporan: isi.trim(),
+        access_token: accessToken,
+      });
       if (error) throw error;
-      return data;
+      return { anonim, access_token: accessToken };
     },
     onSuccess: (data) => {
       toast.success("Laporan terkirim ke Dewan Etik");
       setFormOpen(false);
       setTerlapor("");
       setIsi("");
-      setToken(data?.anonim ? (data.access_token as string) : null);
+      setToken(data.anonim ? data.access_token : null);
       setAnonim(false);
       qc.invalidateQueries({ queryKey: ["laporan-etik"] });
     },
