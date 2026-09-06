@@ -1,5 +1,4 @@
-import { Link } from "@tanstack/react-router";
-import { Mail, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Mail, ArrowLeft, ExternalLink, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Props {
@@ -20,8 +19,26 @@ export function AuthNoticeCard({ email, onBackToSignIn, onResendEmail, resending
       </h3>
       <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
         Tautan aktivasi telah dikirim ke <span className="font-semibold text-foreground">{email}</span>.
-        Klik tautan tersebut untuk mengaktifkan akun driver kamu sebelum masuk.
       </p>
+
+      {/* Trouble Receiving Email Alert Box */}
+      <div className="mt-4 rounded-xl border border-border/80 bg-muted/40 p-3 text-left">
+        <div className="flex items-start gap-2 text-[12px] font-medium text-foreground">
+          <HelpCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <span>Email belum masuk? Ini penyebab umumnya:</span>
+        </div>
+        <ul className="mt-2 space-y-1.5 text-[11px] text-muted-foreground list-disc pl-5 leading-normal">
+          <li>
+            Masuk ke folder <b className="text-foreground">Spam</b>, <b className="text-foreground">Promotions</b>, atau <b className="text-foreground">Update</b>.
+          </li>
+          <li>
+            Supabase default mailer memiliki kuota 3-4 email per jam per project.
+          </li>
+          <li>
+            Atau gunakan tombol <b className="text-foreground">Lanjutkan dengan Google</b> di bawah (langsung aktif tanpa tunggu email).
+          </li>
+        </ul>
+      </div>
 
       <div className="mt-5 space-y-2">
         <Button
@@ -43,10 +60,6 @@ export function AuthNoticeCard({ email, onBackToSignIn, onResendEmail, resending
           <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Sudah konfirmasi? Masuk sekarang
         </Button>
       </div>
-
-      <p className="mt-4 text-[11px] text-muted-foreground">
-        Tidak menemukan email? Cek folder <b className="text-foreground">Spam</b> atau <b className="text-foreground">Promosi</b>.
-      </p>
     </div>
   );
 }
