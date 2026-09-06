@@ -1,0 +1,18 @@
+services:
+  drg-app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.vaio
+    container_name: drg-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - ../.env
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 450M
+        reservations:
+          memory: 128M

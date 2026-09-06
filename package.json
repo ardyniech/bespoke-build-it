@@ -7,6 +7,9 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "build:vaio": "NODE_OPTIONS='--max-old-space-size=1024' NITRO_PRESET=node-server vite build",
+    "start": "node --max-old-space-size=384 .output/server/index.mjs",
+    "serve:vaio": "NODE_ENV=production PORT=3000 node --max-old-space-size=384 .output/server/index.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write ."

@@ -1,0 +1,27 @@
+[Unit]
+Description=DRG App - TanStack Start Production Server (Sony Vaio Optimized)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/var/www/drg-app
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOST=127.0.0.1
+Environment=NODE_OPTIONS="--max-old-space-size=384"
+ExecStart=/usr/bin/node .output/server/index.mjs
+Restart=always
+RestartSec=5
+
+# Resource constraints for low-spec Sony Vaio hardware
+MemoryHigh=400M
+MemoryMax=512M
+CPUQuota=150%
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=drg-app
+
+[Install]
+WantedBy=multi-user.target
