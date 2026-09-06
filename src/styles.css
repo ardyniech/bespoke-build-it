@@ -6,8 +6,8 @@
 
 /*
  * DRG App — design system.
- * Warm, community-first palette inspired by helm merah driver ojek,
- * jaket suar, dan cahaya lampu jalan malam. Bukan aksen ungu generik.
+ * Fresh, driver-first palette inspired by hijau Grab khas jaket & helm mitra driver,
+ * dipadukan dengan aksen kuning amber dan kanvas hangat yang ramah mata di jalan.
  * All colors in oklch.
  */
 
@@ -65,90 +65,90 @@
 
 :root {
   --radius: 0.75rem;
-  /* Krem hangat, bukan putih steril */
-  --background: oklch(0.985 0.012 80);
-  --foreground: oklch(0.22 0.03 40);
+  /* Krem hangat lembut, bukan putih silau di jalanan */
+  --background: oklch(0.985 0.01 135);
+  --foreground: oklch(0.2 0.03 145);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.03 40);
+  --card-foreground: oklch(0.2 0.03 145);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.03 40);
-  /* Merah bata — helm & jaket komunitas */
-  --primary: oklch(0.52 0.19 30);
-  --primary-foreground: oklch(0.99 0.01 80);
-  --primary-glow: oklch(0.66 0.21 38);
-  --secondary: oklch(0.94 0.03 70);
-  --secondary-foreground: oklch(0.28 0.06 40);
-  --muted: oklch(0.95 0.02 75);
-  --muted-foreground: oklch(0.48 0.04 50);
-  /* Kuning amber suar */
-  --accent: oklch(0.82 0.15 75);
-  --accent-foreground: oklch(0.22 0.05 40);
+  --popover-foreground: oklch(0.2 0.03 145);
+  /* Hijau Grab Ikonik (#00B14F / oklch(0.64 0.20 145)) */
+  --primary: oklch(0.61 0.20 145);
+  --primary-foreground: oklch(0.99 0.005 145);
+  --primary-glow: oklch(0.72 0.22 143);
+  --secondary: oklch(0.95 0.025 145);
+  --secondary-foreground: oklch(0.25 0.08 145);
+  --muted: oklch(0.96 0.015 140);
+  --muted-foreground: oklch(0.48 0.04 145);
+  /* Kuning amber peringatan & suar keselamatan */
+  --accent: oklch(0.85 0.16 85);
+  --accent-foreground: oklch(0.25 0.06 145);
   --destructive: oklch(0.55 0.24 27);
   --destructive-foreground: oklch(0.99 0.01 80);
-  --success: oklch(0.62 0.14 155);
-  --success-foreground: oklch(0.99 0.01 155);
-  --warn: oklch(0.78 0.16 70);
-  --warn-foreground: oklch(0.25 0.05 50);
+  --success: oklch(0.61 0.20 145);
+  --success-foreground: oklch(0.99 0.005 145);
+  --warn: oklch(0.8 0.16 75);
+  --warn-foreground: oklch(0.25 0.05 60);
   --signal: oklch(0.58 0.22 28);
   --signal-foreground: oklch(0.99 0.01 80);
-  --border: oklch(0.9 0.02 70);
-  --input: oklch(0.92 0.02 70);
-  --ring: oklch(0.52 0.19 30);
-  --chart-1: oklch(0.55 0.2 30);
-  --chart-2: oklch(0.75 0.16 75);
-  --chart-3: oklch(0.55 0.13 200);
-  --chart-4: oklch(0.62 0.14 155);
-  --chart-5: oklch(0.42 0.09 300);
-  /* Sidebar: gelap kayu bakar */
-  --sidebar: oklch(0.24 0.03 40);
-  --sidebar-foreground: oklch(0.94 0.02 70);
-  --sidebar-primary: oklch(0.66 0.21 38);
-  --sidebar-primary-foreground: oklch(0.99 0.01 80);
-  --sidebar-accent: oklch(0.32 0.04 40);
-  --sidebar-accent-foreground: oklch(0.98 0.02 70);
-  --sidebar-border: oklch(0.32 0.03 40);
-  --sidebar-ring: oklch(0.66 0.21 38);
+  --border: oklch(0.91 0.015 145);
+  --input: oklch(0.93 0.015 145);
+  --ring: oklch(0.61 0.20 145);
+  --chart-1: oklch(0.61 0.20 145);
+  --chart-2: oklch(0.78 0.17 140);
+  --chart-3: oklch(0.85 0.16 85);
+  --chart-4: oklch(0.5 0.15 160);
+  --chart-5: oklch(0.35 0.09 150);
+  /* Sidebar: Hijau tua hutan jalanan malam (Grab Forest) */
+  --sidebar: oklch(0.2 0.04 148);
+  --sidebar-foreground: oklch(0.95 0.015 145);
+  --sidebar-primary: oklch(0.66 0.21 144);
+  --sidebar-primary-foreground: oklch(0.15 0.04 148);
+  --sidebar-accent: oklch(0.27 0.05 148);
+  --sidebar-accent-foreground: oklch(0.98 0.01 145);
+  --sidebar-border: oklch(0.28 0.04 148);
+  --sidebar-ring: oklch(0.66 0.21 144);
 
-  --gradient-warm: linear-gradient(135deg, oklch(0.52 0.19 30) 0%, oklch(0.66 0.21 38) 55%, oklch(0.82 0.15 75) 100%);
-  --gradient-ember: linear-gradient(180deg, oklch(0.24 0.03 40) 0%, oklch(0.19 0.04 30) 100%);
-  --shadow-warm: 0 12px 40px -18px oklch(0.52 0.19 30 / 0.45);
-  --shadow-card: 0 1px 0 oklch(0.9 0.02 70), 0 8px 24px -20px oklch(0.22 0.03 40 / 0.35);
+  --gradient-warm: linear-gradient(135deg, oklch(0.52 0.19 146) 0%, oklch(0.63 0.21 144) 60%, oklch(0.76 0.19 138) 100%);
+  --gradient-ember: linear-gradient(180deg, oklch(0.2 0.04 148) 0%, oklch(0.16 0.03 148) 100%);
+  --shadow-warm: 0 12px 40px -18px oklch(0.52 0.19 146 / 0.4);
+  --shadow-card: 0 1px 0 oklch(0.91 0.015 145), 0 8px 24px -20px oklch(0.2 0.03 145 / 0.25);
 }
 
 .dark {
-  --background: oklch(0.19 0.03 40);
-  --foreground: oklch(0.96 0.02 70);
-  --card: oklch(0.24 0.03 40);
-  --card-foreground: oklch(0.96 0.02 70);
-  --popover: oklch(0.24 0.03 40);
-  --popover-foreground: oklch(0.96 0.02 70);
-  --primary: oklch(0.66 0.21 38);
-  --primary-foreground: oklch(0.19 0.03 40);
-  --secondary: oklch(0.3 0.04 40);
-  --secondary-foreground: oklch(0.96 0.02 70);
-  --muted: oklch(0.28 0.03 40);
-  --muted-foreground: oklch(0.75 0.03 60);
-  --accent: oklch(0.82 0.15 75);
-  --accent-foreground: oklch(0.19 0.03 40);
+  --background: oklch(0.17 0.025 148);
+  --foreground: oklch(0.96 0.015 145);
+  --card: oklch(0.22 0.03 148);
+  --card-foreground: oklch(0.96 0.015 145);
+  --popover: oklch(0.22 0.03 148);
+  --popover-foreground: oklch(0.96 0.015 145);
+  --primary: oklch(0.66 0.21 144);
+  --primary-foreground: oklch(0.15 0.04 148);
+  --secondary: oklch(0.28 0.04 148);
+  --secondary-foreground: oklch(0.96 0.015 145);
+  --muted: oklch(0.26 0.025 148);
+  --muted-foreground: oklch(0.75 0.03 145);
+  --accent: oklch(0.85 0.16 85);
+  --accent-foreground: oklch(0.15 0.04 148);
   --destructive: oklch(0.62 0.22 27);
   --destructive-foreground: oklch(0.99 0.01 80);
-  --success: oklch(0.7 0.14 155);
-  --success-foreground: oklch(0.15 0.03 155);
+  --success: oklch(0.66 0.21 144);
+  --success-foreground: oklch(0.15 0.04 148);
   --warn: oklch(0.82 0.16 75);
   --warn-foreground: oklch(0.2 0.04 40);
   --signal: oklch(0.66 0.22 28);
   --signal-foreground: oklch(0.99 0.01 80);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.66 0.21 38);
-  --sidebar: oklch(0.16 0.02 40);
-  --sidebar-foreground: oklch(0.94 0.02 70);
-  --sidebar-primary: oklch(0.66 0.21 38);
-  --sidebar-primary-foreground: oklch(0.19 0.03 40);
-  --sidebar-accent: oklch(0.24 0.03 40);
-  --sidebar-accent-foreground: oklch(0.96 0.02 70);
+  --ring: oklch(0.66 0.21 144);
+  --sidebar: oklch(0.15 0.03 148);
+  --sidebar-foreground: oklch(0.94 0.015 145);
+  --sidebar-primary: oklch(0.66 0.21 144);
+  --sidebar-primary-foreground: oklch(0.15 0.04 148);
+  --sidebar-accent: oklch(0.22 0.035 148);
+  --sidebar-accent-foreground: oklch(0.96 0.015 145);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.66 0.21 38);
+  --sidebar-ring: oklch(0.66 0.21 144);
 }
 
 @layer base {

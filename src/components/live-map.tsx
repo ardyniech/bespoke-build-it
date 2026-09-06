@@ -13,7 +13,7 @@ export type MapPoint = {
 
 const COLORS: Record<NonNullable<MapPoint["variant"]>, string> = {
   me: "#0284c7",
-  active: "#c14a2a",
+  active: "#00B14F",
   idle: "#94a3b8",
   sos: "#dc2626",
 };
@@ -93,7 +93,7 @@ export default function LiveMap({
                 href={`https://www.google.com/maps?q=${p.lat},${p.lng}`}
                 target="_blank"
                 rel="noreferrer"
-                style={{ display: "inline-block", marginTop: 8, fontSize: 12, color: "#c14a2a", fontWeight: 600 }}
+                style={{ display: "inline-block", marginTop: 8, fontSize: 12, color: "#00B14F", fontWeight: 600 }}
               >
                 Buka di Google Maps →
               </a>
