@@ -4,6 +4,8 @@ import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ExternalLink, GraduationCap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { KaderisasiEvaluasi } from "@/components/kaderisasi-evaluasi";
+import { useMe } from "@/hooks/use-me";
 
 export const Route = createFileRoute("/_authenticated/kaderisasi")({
   head: () => ({ meta: [{ title: "Kaderisasi — DRG App" }] }),
@@ -11,6 +13,8 @@ export const Route = createFileRoute("/_authenticated/kaderisasi")({
 });
 
 function KaderisasiPage() {
+  const { data: me } = useMe();
+  const isStaff = !!me?.roles.some((r) => r === "satgas" || r === "admin" || r === "super_admin");
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["kaderisasi-stats"],
     queryFn: async () => {
@@ -83,6 +87,8 @@ function KaderisasiPage() {
           </div>
         </div>
       </div>
+
+      <KaderisasiEvaluasi isStaff={isStaff} myId={me?.id ?? null} />
     </PageShell>
   );
 }
