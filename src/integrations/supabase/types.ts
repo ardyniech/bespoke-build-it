@@ -103,6 +103,51 @@ export type Database = {
           },
         ]
       }
+      jenjang_riwayat: {
+        Row: {
+          catatan: string | null
+          created_at: string
+          dari: Database["public"]["Enums"]["jenjang_anggota"] | null
+          evaluator_id: string | null
+          id: string
+          ke: Database["public"]["Enums"]["jenjang_anggota"]
+          user_id: string
+        }
+        Insert: {
+          catatan?: string | null
+          created_at?: string
+          dari?: Database["public"]["Enums"]["jenjang_anggota"] | null
+          evaluator_id?: string | null
+          id?: string
+          ke: Database["public"]["Enums"]["jenjang_anggota"]
+          user_id: string
+        }
+        Update: {
+          catatan?: string | null
+          created_at?: string
+          dari?: Database["public"]["Enums"]["jenjang_anggota"] | null
+          evaluator_id?: string | null
+          id?: string
+          ke?: Database["public"]["Enums"]["jenjang_anggota"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jenjang_riwayat_evaluator_id_fkey"
+            columns: ["evaluator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jenjang_riwayat_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       kas_audit_log: {
         Row: {
           action: string
@@ -883,6 +928,14 @@ export type Database = {
           _no_hp: string
         }
         Returns: string
+      }
+      ubah_jenjang: {
+        Args: {
+          _catatan: string
+          _ke: Database["public"]["Enums"]["jenjang_anggota"]
+          _user_id: string
+        }
+        Returns: undefined
       }
       verify_application_email: { Args: { _token: string }; Returns: boolean }
     }
