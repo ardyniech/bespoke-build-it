@@ -36,13 +36,16 @@ function Dashboard() {
     queryKey: ["profile", user?.id],
     enabled: !!user?.id,
     queryFn: async () => {
-      const { data } = await supabase.from("profiles").select("nama, role, pangkalan").eq("id", user!.id).maybeSingle();
-      return data;
+      const [{ data: p }, { data: r }] = await Promise.all([
+        supabase.from("profiles").select("nama, alamat").eq("id", user!.id).maybeSingle(),
+        supabase.from("user_roles").select("role").eq("user_id", user!.id),
+      ]);
+      return p ? { ...p, role: r?.[0]?.role ?? null } : null;
     },
   });
 
   const progress = useCommunityProgress({
-    hasCompletedProfile: Boolean(profile?.pangkalan && profile?.nama),
+    hasCompletedProfile: Boolean(profile?.alamat && profile?.nama),
     hasShifts: Boolean((overview?.shiftHariIni ?? 0) > 0),
     hasTransactions: Boolean((overview?.saldo ?? 0) > 0 || (overview?.masukBulanIni ?? 0) > 0),
     role: profile?.role ?? null,
