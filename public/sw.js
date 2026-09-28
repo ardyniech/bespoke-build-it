@@ -19,10 +19,14 @@ self.addEventListener("push", (event) => {
     body: data.body || "Ada panggilan darurat dari rekan.",
     icon: "/icon-512.png",
     badge: "/icon-512.png",
-    vibrate: [200, 100, 200, 100, 200],
+    vibrate: [500, 200, 500, 200, 500, 200, 1000],
     tag: data.tag || "drg-sos",
     renotify: true,
     requireInteraction: true,
+    actions: [
+      { action: "open", title: "Buka & respons" },
+      { action: "dismiss", title: "Nanti" },
+    ],
     data: { url: data.url || "/kejadian" },
   };
   event.waitUntil(self.registration.showNotification(title, options));
@@ -30,6 +34,7 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
+  if (event.action === "dismiss") return;
   const target = (event.notification.data && event.notification.data.url) || "/kejadian";
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {

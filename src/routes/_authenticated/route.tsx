@@ -8,6 +8,7 @@ import { Siren, Radio, RadioTower } from "lucide-react";
 import { useLiveLocation } from "@/hooks/use-live-location";
 import { toast } from "sonner";
 import { useMe } from "@/hooks/use-me";
+import { SosAlarm } from "@/components/sos-alarm";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -100,6 +101,7 @@ function AuthedLayout() {
           <main className="flex-1">
             <Outlet />
           </main>
+          {me && !me.isPendingReview ? <SosAlarm userId={user?.id} /> : null}
         </div>
       </div>
     </SidebarProvider>
